@@ -27,12 +27,8 @@ public class PalisadeHealthTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Autowired
-    ApplicationContext context;
-
     @Test
     public void registerRequestTest() {
-        Arrays.stream(this.context.getBeanDefinitionNames()).forEach(bean -> LOGGER.info("name = {}", bean));
         final String health = this.restTemplate.getForObject("/actuator/health", String.class);
         assertThat(health, is(equalTo("{\"status\":\"UP\"}")));
     }
