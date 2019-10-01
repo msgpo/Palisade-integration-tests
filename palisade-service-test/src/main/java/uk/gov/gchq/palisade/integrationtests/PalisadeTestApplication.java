@@ -2,17 +2,19 @@ package uk.gov.gchq.palisade.integrationtests;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import uk.gov.gchq.palisade.service.palisade.PalisadeApplication;
+import uk.gov.gchq.palisade.service.palisade.config.ApplicationConfiguration;
 
 @SpringBootApplication
+@EnableFeignClients(basePackages = "uk.gov.gchq.palisade.service.palisade.web")
+@Import({ApplicationConfiguration.class})
 public class PalisadeTestApplication {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PalisadeTestApplication.class);

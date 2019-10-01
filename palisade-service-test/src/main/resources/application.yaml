@@ -31,6 +31,13 @@ management:
           - info
           - metrics
 
+web:
+  client:
+    audit-service: "localhost:8086"
+    policy-service: "localhost:8081"
+    resource-service: "localhost:8082"
+    user-service: "localhost:8083"
+
 feign:
   client:
     config:
