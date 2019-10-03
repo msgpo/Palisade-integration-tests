@@ -33,10 +33,10 @@ management:
 
 web:
   client:
-    audit-service: "http://localhost:8086"
-    policy-service: "http://localhost:8081"
-    resource-service: "http://localhost:8082"
-    user-service: "http://localhost:8083"
+    audit-service: "localhost:8086"
+    policy-service: "localhost:8081"
+    resource-service: "localhost:8082"
+    user-service: "localhost:8083"
 
 feign:
   client:
