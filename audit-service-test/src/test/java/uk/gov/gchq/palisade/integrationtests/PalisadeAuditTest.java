@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.is;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles({"test"})
-public class PalisadeHealthTest {
+public class PalisadeAuditTest {
 
     @Autowired
     private TestRestTemplate restTemplate;

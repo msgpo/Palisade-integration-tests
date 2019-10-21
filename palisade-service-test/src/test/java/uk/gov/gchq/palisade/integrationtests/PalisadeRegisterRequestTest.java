@@ -71,6 +71,8 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.equalTo;
 
+//PAL-163 Scenario 2
+// When registering data the Audit service must return 200 STATUS else test fails and return STATUS
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles({"test"})
