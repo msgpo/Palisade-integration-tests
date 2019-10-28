@@ -11,8 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "uk.gov.gchq.palisade.service.palisade.web")
-@Import({ApplicationConfiguration.class})
+@EnableFeignClients
 public class PalisadeTestApplication {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PalisadeTestApplication.class);
