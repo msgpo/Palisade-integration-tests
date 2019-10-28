@@ -8,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+
+import uk.gov.gchq.palisade.service.palisade.PalisadeApplication;
 
 @SpringBootApplication
 @EnableFeignClients
@@ -21,7 +22,7 @@ public class PalisadeTestApplication {
      * @param args from the command line
      */
     public static void main(final String[] args) {
-         new SpringApplicationBuilder(PalisadeTestApplication.class).web(args.length == 0 ? WebApplicationType.SERVLET : WebApplicationType.NONE)
+         new SpringApplicationBuilder(PalisadeApplication.class).web(args.length == 0 ? WebApplicationType.SERVLET : WebApplicationType.NONE)
                 .run(args);
     }
 
