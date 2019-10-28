@@ -21,7 +21,7 @@ public class PalisadeTestApplication {
      * @param args from the command line
      */
     public static void main(final String[] args) {
-         new SpringApplicationBuilder(PalisadeApplication.class).web(args.length == 0 ? WebApplicationType.SERVLET : WebApplicationType.NONE)
+         new SpringApplicationBuilder(PalisadeTestApplication.class).web(args.length == 0 ? WebApplicationType.SERVLET : WebApplicationType.NONE)
                 .run(args);
     }
 

@@ -28,7 +28,7 @@
     <groupId>uk.gov.gchq.palisade</groupId>
     <artifactId>integration-tests</artifactId>
     <version>0.4.0-${revision}</version>
-    <name>palisade-test</name>
+    <name>palisade-integration-test</name>
     <description>Integration tests for palisade</description>
     <packaging>pom</packaging>
 
