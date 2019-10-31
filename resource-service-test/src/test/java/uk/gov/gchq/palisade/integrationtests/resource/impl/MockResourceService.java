@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.gchq.palisade.integrationtests.impl;
+package uk.gov.gchq.palisade.integrationtests.resource.impl;
 
 import org.mockito.Mockito;
 

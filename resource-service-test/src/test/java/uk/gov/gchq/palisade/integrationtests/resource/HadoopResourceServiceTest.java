@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.gchq.palisade.integrationtests;
+package uk.gov.gchq.palisade.integrationtests.resource;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.ArrayUtils;
@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.gov.gchq.palisade.RequestId;
-import uk.gov.gchq.palisade.integrationtests.impl.MockDataService;
+import uk.gov.gchq.palisade.integrationtests.resource.impl.MockDataService;
 import uk.gov.gchq.palisade.jsonserialisation.JSONSerialiser;
 import uk.gov.gchq.palisade.resource.ChildResource;
 import uk.gov.gchq.palisade.resource.LeafResource;

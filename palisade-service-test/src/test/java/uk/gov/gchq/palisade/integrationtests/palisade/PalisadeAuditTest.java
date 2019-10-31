@@ -1,4 +1,4 @@
-package uk.gov.gchq.palisade.integrationtests;
+package uk.gov.gchq.palisade.integrationtests.palisade;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;

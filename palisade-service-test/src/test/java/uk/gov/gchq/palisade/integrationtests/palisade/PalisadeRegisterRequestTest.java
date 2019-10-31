@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.gov.gchq.palisade.integrationtests;
+package uk.gov.gchq.palisade.integrationtests.palisade;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -198,7 +198,7 @@ public class PalisadeRegisterRequestTest {
 
         DataRequestResponse result = this.palisadeService.registerDataRequest(REGISTER_DATA_REQUEST).get();
         assertThat(result, is(not(equalTo("{\"{\\\"class\\\":\\\"uk.gov.gchq.palisade.resource.impl.FileResource\\\",\\\"id\\\":\\\"data-to-access\\\",\\\"attributes\\\":{},\\\"parent\\\":{\\\"class\\\":\\\"uk.gov.gchq.palisade.resource.impl.DirectoryResource\\\",\\\"id\\\":\\\"home/\\\",\\\"parent\\\":{\\\"class\\\":\\\"uk.gov.gchq.palisade.resource.impl.SystemResource\\\",\\\"id\\\":\\\"nix/\\\"}},\\\"serialisedFormat\\\":\\\"json\\\",\\\"\n" +
-                "type\\\":\\\"string\\\"}\":{\"service\":{\"class\":\"uk.gov.gchq.palisade.integrationtests.PalisadeRegisterRequestTest$StubService\",\"@id\":1,\"class\":\"uk.gov.gchq.palisade.integrationtests.PalisadeRegisterRequestTest$StubService\"}}}\n"))));
+                "type\\\":\\\"string\\\"}\":{\"service\":{\"class\":\"uk.gov.gchq.palisade.integrationtests.palisade.PalisadeRegisterRequestTest$StubService\",\"@id\":1,\"class\":\"uk.gov.gchq.palisade.integrationtests.palisade.PalisadeRegisterRequestTest$StubService\"}}}\n"))));
     }
 
 }

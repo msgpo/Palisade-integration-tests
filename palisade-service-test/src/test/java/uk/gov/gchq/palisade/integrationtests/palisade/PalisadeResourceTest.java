@@ -1,4 +1,4 @@
-package uk.gov.gchq.palisade.integrationtests;
+package uk.gov.gchq.palisade.integrationtests.palisade;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
@@ -12,7 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import uk.gov.gchq.palisade.RequestId;
-import uk.gov.gchq.palisade.integrationtests.PalisadeRegisterRequestTest.StubService;
+import uk.gov.gchq.palisade.integrationtests.palisade.PalisadeRegisterRequestTest.StubService;
 import uk.gov.gchq.palisade.resource.LeafResource;
 import uk.gov.gchq.palisade.resource.impl.DirectoryResource;
 import uk.gov.gchq.palisade.resource.impl.FileResource;
