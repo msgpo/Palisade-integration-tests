@@ -19,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
@@ -30,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import uk.gov.gchq.palisade.Context;
 import uk.gov.gchq.palisade.RequestId;
 import uk.gov.gchq.palisade.User;
@@ -52,6 +52,7 @@ import uk.gov.gchq.palisade.service.palisade.service.PalisadeService;
 import uk.gov.gchq.palisade.service.request.DataRequestResponse;
 import uk.gov.gchq.palisade.service.request.Request;
 
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Map;
@@ -66,10 +67,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 //PAL-163 Scenario 2
 // When registering data the Audit service must return 200 STATUS else test fails and return STATUS
@@ -158,7 +159,7 @@ public class PalisadeRegisterRequestTest {
     }
 
     @Test
-    public void registerDataRequestTest() throws JsonProcessingException, ExecutionException, InterruptedException {
+    public void registerDataRequestTest() throws ExecutionException, InterruptedException, IOException {
         userServiceMock.stubFor(post(urlPathMatching("/getUser"))
                 .withRequestBody(containing("user-id"))
                 .willReturn(

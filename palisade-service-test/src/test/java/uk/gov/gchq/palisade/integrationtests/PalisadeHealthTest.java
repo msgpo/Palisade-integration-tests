@@ -38,7 +38,7 @@ public class PalisadeHealthTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void registerRequestTest() {
+    public void isUp() {
         final String health = this.restTemplate.getForObject("/actuator/health", String.class);
         assertThat(health, is(equalTo("{\"status\":\"UP\"}")));
     }

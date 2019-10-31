@@ -45,7 +45,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-//PAL-163 Scenario 3
+
 // When registering data the Audit service must return 200 STATUS else test fails and return STATUS
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -54,6 +54,9 @@ public class PalisadeUserTest {
 
     @Autowired
     public UserService userService;
+
+    @Autowired
+    public ObjectMapper objectMapper;
 
     @ClassRule
     public static WireMockRule userServiceMock = new WireMockRule(options().port(8083).notifier(new ConsoleNotifier(true)));
@@ -72,10 +75,10 @@ public class PalisadeUserTest {
                         aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody(new ObjectMapper().writeValueAsString(USER))
+                        .withBody(objectMapper.writeValueAsString(USER))
                 ));
 
-        final User subject = this.userService.getUser(GET_USER_REQUEST).toCompletableFuture().get();
+        final User subject = this.userService.getUser(GET_USER_REQUEST).get();
         assertThat(subject.getUserId().getId(), is(equalTo("user-id")));
     }
 

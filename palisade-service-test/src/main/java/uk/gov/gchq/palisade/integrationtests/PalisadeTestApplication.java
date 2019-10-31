@@ -15,7 +15,7 @@ import uk.gov.gchq.palisade.service.palisade.config.ApplicationConfiguration;
 
 @SpringBootApplication
 @EnableFeignClients(basePackages = "uk.gov.gchq.palisade.service.palisade.web")
-@Import({ApplicationConfiguration.class})
+@Import(ApplicationConfiguration.class)
 public class PalisadeTestApplication {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PalisadeTestApplication.class);
