@@ -17,6 +17,7 @@ package uk.gov.gchq.palisade.integrationtests.palisade;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import uk.gov.gchq.palisade.User;
-import uk.gov.gchq.palisade.service.palisade.request.GetUserRequest;
-import uk.gov.gchq.palisade.service.palisade.service.UserService;
+import uk.gov.gchq.palisade.service.palisade.request.RegisterDataRequest;
+import uk.gov.gchq.palisade.service.palisade.service.PalisadeService;
+import uk.gov.gchq.palisade.service.request.DataRequestResponse;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -35,44 +36,45 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
-
-// When registering data the Audit service must return 200 STATUS else test fails and return STATUS
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles({"test"})
-public class PalisadeUserTest extends BaseTestEnvironment {
+public class PalisadeDataTest extends BaseTestEnvironment {
 
     @Autowired
-    private UserService userService;
+    private PalisadeService palisadeService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    private WireMockRule userServiceMock = USER_SERVICE_MOCK;
+    private WireMockRule dataServiceMock = DATA_SERVICE_MOCK;
 
-    private GetUserRequest getUserRequest = new GetUserRequest().userId(USER_ID);
+    private DataRequestResponse dataResponse = DATA_RESPONSE;
+
+    private RegisterDataRequest registerDataRequest = new RegisterDataRequest()
+            .userId(USER.getUserId())
+            .context(CONTEXT)
+            .resourceId(LEAF_RESOURCE.getId());
     {
-        getUserRequest.originalRequestId(REQUEST_ID);
+        registerDataRequest.originalRequestId(REQUEST_ID);
     }
-    private User user = USER;
 
     @Test
-    public void userServiceTest() throws IOException, ExecutionException, InterruptedException {
-        userServiceMock.stubFor(post(urlPathMatching("/getUser"))
+    public void registerDataRequestTest() throws ExecutionException, InterruptedException, IOException {
+        dataServiceMock.stubFor(post(urlPathMatching("/get"))
                 .withRequestBody(containing("user-id"))
                 .willReturn(
                         aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(objectMapper.writeValueAsString(user))
+                                .withStatus(200)
+                                .withHeader("Content-Type", "application/json")
+                                .withBody(objectMapper.writeValueAsString(dataResponse))
                 ));
 
-        final User subject = this.userService.getUser(getUserRequest).get();
-        assertThat(subject.getUserId().getId(), is(equalTo("user-id")));
+        DataRequestResponse result = this.palisadeService.registerDataRequest(registerDataRequest).get();
+        assertThat(result, equalTo(dataResponse));
     }
-
 }
