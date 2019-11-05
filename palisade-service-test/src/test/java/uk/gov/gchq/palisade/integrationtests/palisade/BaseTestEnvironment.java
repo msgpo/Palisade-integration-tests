@@ -82,8 +82,6 @@ public class BaseTestEnvironment {
     public static WireMockRule DATA_SERVICE_MOCK = new WireMockRule(options().port(8082).notifier(new ConsoleNotifier(true)));
     @ClassRule
     public static WireMockRule DISCOVERY_SERVICE_MOCK = new WireMockRule(options().port(8083).notifier(new ConsoleNotifier(true)));
-    //@ClassRule
-    //public static WireMockRule PALISADE_SERVICE_MOCK = new WireMockRule(options().port(8084).notifier(new ConsoleNotifier(true)));
     @ClassRule
     public static WireMockRule POLICY_SERVICE_MOCK = new WireMockRule(options().port(8085).notifier(new ConsoleNotifier(true)));
     @ClassRule

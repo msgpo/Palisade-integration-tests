@@ -86,9 +86,9 @@
     </dependencyManagement>
 
     <scm>
-        <!-- <connection>scm:git:ssh://git@github.com:gchq/Palisade-services.git</connection> -->
-        <developerConnection>scm:git:ssh://git@github.com:gchq/Palisade-services.git</developerConnection>
-        <url>https://github.com/gchq/Palisade-services</url>
+        <!-- <connection>scm:git:ssh://git@github.com:gchq/Palisade-integration-tests.git</connection> -->
+        <developerConnection>scm:git:ssh://git@github.com:gchq/Palisade-integration-tests.git</developerConnection>
+        <url>https://github.com/gchq/</url>
     </scm>
 
     <distributionManagement>
