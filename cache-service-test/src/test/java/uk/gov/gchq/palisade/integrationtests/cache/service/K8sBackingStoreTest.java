@@ -17,9 +17,11 @@ package uk.gov.gchq.palisade.integrationtests.cache.service;
 
 import io.fabric8.kubernetes.client.server.mock.KubernetesServer;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+
+import uk.gov.gchq.palisade.integrationtests.cache.repository.K8sBackingStore;
+import uk.gov.gchq.palisade.integrationtests.cache.repository.SimpleCacheObject;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;

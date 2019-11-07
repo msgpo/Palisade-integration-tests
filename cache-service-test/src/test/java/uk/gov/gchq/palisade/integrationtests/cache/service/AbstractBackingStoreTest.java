@@ -18,6 +18,9 @@ package uk.gov.gchq.palisade.integrationtests.cache.service;
 import org.junit.Before;
 import org.junit.Test;
 
+import uk.gov.gchq.palisade.integrationtests.cache.repository.BackingStore;
+import uk.gov.gchq.palisade.integrationtests.cache.repository.SimpleCacheObject;
+
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;

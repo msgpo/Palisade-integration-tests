@@ -21,6 +21,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 
+import uk.gov.gchq.palisade.integrationtests.cache.repository.EtcdBackingStore;
+import uk.gov.gchq.palisade.integrationtests.cache.repository.SimpleCacheObject;
+
 import java.net.URI;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
