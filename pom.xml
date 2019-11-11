@@ -63,13 +63,8 @@
     </properties>
 
     <modules>
-<!--        <module>audit-service-test</module>-->
-<!--        <module>data-service-test</module>-->
-<!--        <module>discovery-service-test</module>-->
         <module>palisade-service-test</module>
-<!--        <module>policy-service-test</module>-->
         <module>resource-service-test</module>
-<!--        <module>user-service-test</module>-->
     </modules>
 
     <dependencyManagement>
