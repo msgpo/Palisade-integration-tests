@@ -20,7 +20,7 @@ spring:
       enabled: always
 
 server:
-  port: 8080
+  port: 8084
 
 eureka:
   client:
@@ -40,7 +40,6 @@ web:
     audit-service: "localhost:8081"
     data-service: "localhost:8082"
     discovery-service: "localhost:8083"
-    palisade-service: "localhost:8084"
     policy-service: "localhost:8085"
     resource-service: "localhost:8086"
     user-service: "localhost:8087"
