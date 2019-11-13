@@ -16,6 +16,7 @@
 
 package uk.gov.gchq.palisade.integrationtests.cache.service;
 
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import uk.gov.gchq.palisade.service.ServiceState;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
+@Ignore
 @RunWith(JUnit4.class)
 public class SimpleCacheServiceTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleCacheServiceTest.class);
