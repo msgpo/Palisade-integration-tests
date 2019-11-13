@@ -15,11 +15,11 @@
 replicaCount: 1
 
 service:
-  port: 8012
+  port: 80
 
 image:
-  repository: palisade/palisade-service-test
-  tag: 48479c1-SNAPSHOT
+  repository: palisade/@artifactId@
+  tag: @git.commit.id.abbrev@-@revision@
   pullPolicy: IfNotPresent
 
 resources:

@@ -12,24 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-replicaCount: 1
+FROM openjdk:11
+VOLUME /tmp
 
-service:
-  port: 8012
+ARG JAR_FILE
 
-image:
-  repository: palisade/palisade-service-test
-  tag: 48479c1-SNAPSHOT
-  pullPolicy: IfNotPresent
+ADD $JAR_FILE /usr/share/palisade-service/cache-service-test.jar
 
-resources:
-  limits:
-    cpu: 750m
-    memory: 2.5Gi
-  requests:
-    cpu: 250m
-    memory: 1Gi
+LABEL service="cache-test", project="integration-tests"
 
-nodeSelector: {}
-tolerations: []
-affinity: {}
+ENTRYPOINT ["java", "-jar", "/usr/share/palisade-service/cache-service-test.jar"]

@@ -63,6 +63,7 @@
     </properties>
 
     <modules>
+        <module>cache-service-test</module>
         <module>palisade-service-test</module>
         <module>resource-service-test</module>
     </modules>
