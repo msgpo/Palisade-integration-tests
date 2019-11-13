@@ -29,7 +29,7 @@
     <artifactId>cache-service-test</artifactId>
 
     <properties>
-        <fabric8.version>4.2.0</fabric8.version>
+        <fabric8.version>4.3.0</fabric8.version>
         <jetcd.version>0.3.0</jetcd.version>
     </properties>
 
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>uk.gov.gchq.palisade</groupId>
             <artifactId>common</artifactId>
-            <version>0.4.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>io.etcd</groupId>

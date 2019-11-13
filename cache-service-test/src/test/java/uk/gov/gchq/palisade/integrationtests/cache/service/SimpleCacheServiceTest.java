@@ -16,13 +16,11 @@
 
 package uk.gov.gchq.palisade.integrationtests.cache.service;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.gov.gchq.palisade.exception.NoConfigException;
 import uk.gov.gchq.palisade.integrationtests.cache.repository.BackingStore;
 import uk.gov.gchq.palisade.integrationtests.cache.repository.HashMapBackingStore;
 import uk.gov.gchq.palisade.service.ServiceState;
@@ -38,16 +36,4 @@ public class SimpleCacheServiceTest {
     private ServiceState serviceState = new ServiceState();
     private BackingStore store = new HashMapBackingStore();
     private Duration maxLocalTTL = Duration.of(5, ChronoUnit.MINUTES);
-
-    @Test(expected = NoConfigException.class)
-    public void applyConfigFromReturnsErrorTest() {
-        //Given
-        serviceState.put("cache.svc.store", null);
-        serviceState.put("cache.svc.max.ttl", Duration.of(5, ChronoUnit.MINUTES).toString());
-
-        //When
-        cacheService.maximumLocalCacheDuration(maxLocalTTL);
-        cacheService.setBackingStore(store);
-        cacheService.applyConfigFrom(serviceState);
-    }
 }
