@@ -26,7 +26,7 @@ This is the main Palisade Integration Repository.
 </span>
 
 ## Getting started
-The integration test suite to be run after the build but before the deployment as part of the CI/CD pipeline.
+The integration test suite is to be run after the build but before the deployment as part of the CI/CD pipeline.
 
 ## License
 Palisade-Common is licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0) and is covered by [Crown Copyright](https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/).
