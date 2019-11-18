@@ -55,10 +55,6 @@ public class BaseTestEnvironment {
     @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "class")
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
     public static class StubService implements Service {
-        @Override
-        public CompletableFuture<String> process(final Request request) {
-            return CompletableFuture.completedFuture(request.getId().getId());
-        }
 
         @Override
         public boolean equals(final Object obj) {
