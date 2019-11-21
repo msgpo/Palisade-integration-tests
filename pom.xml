@@ -60,6 +60,8 @@
         <protobuf.version>3.5.1</protobuf.version>
         <checkstyle.plugin.version>3.1.0</checkstyle.plugin.version>
         <checkstyle.phase>verify</checkstyle.phase>
+        <depends.phase>validate</depends.phase>
+        <depends.maven.version>3.1.1</depends.maven.version>
     </properties>
 
     <modules>
@@ -104,6 +106,23 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${depends.maven.version}</version>
+                <executions>
+                    <execution>
+                        <id>dependencies</id>
+                        <phase>${depends.phase}</phase>
+                        <goals>
+                            <goal>tree</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>mvn_dependency_tree.txt</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
