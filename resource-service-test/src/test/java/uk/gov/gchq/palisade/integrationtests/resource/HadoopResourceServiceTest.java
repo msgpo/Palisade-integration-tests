@@ -42,14 +42,13 @@ import uk.gov.gchq.palisade.resource.ParentResource;
 import uk.gov.gchq.palisade.resource.impl.DirectoryResource;
 import uk.gov.gchq.palisade.resource.impl.FileResource;
 import uk.gov.gchq.palisade.resource.impl.SystemResource;
+import uk.gov.gchq.palisade.resource.request.GetResourcesByIdRequest;
+import uk.gov.gchq.palisade.resource.request.GetResourcesByResourceRequest;
+import uk.gov.gchq.palisade.resource.request.GetResourcesBySerialisedFormatRequest;
+import uk.gov.gchq.palisade.resource.request.GetResourcesByTypeRequest;
 import uk.gov.gchq.palisade.service.ConnectionDetail;
 import uk.gov.gchq.palisade.service.SimpleConnectionDetail;
-import uk.gov.gchq.palisade.service.resource.repository.HashMapBackingStore;
 import uk.gov.gchq.palisade.service.resource.repository.SimpleCacheService;
-import uk.gov.gchq.palisade.service.resource.request.GetResourcesByIdRequest;
-import uk.gov.gchq.palisade.service.resource.request.GetResourcesByResourceRequest;
-import uk.gov.gchq.palisade.service.resource.request.GetResourcesBySerialisedFormatRequest;
-import uk.gov.gchq.palisade.service.resource.request.GetResourcesByTypeRequest;
 import uk.gov.gchq.palisade.service.resource.service.HadoopResourceService;
 
 import java.io.BufferedWriter;
@@ -116,9 +115,7 @@ public class HadoopResourceServiceTest {
         expected = Maps.newHashMap();
         simpleConnection = new SimpleConnectionDetail().service(new MockDataService());
 
-        simpleCache = new SimpleCacheService().backingStore(new HashMapBackingStore(true));
-
-        resourceService = new HadoopResourceService(config, simpleCache);
+        resourceService = new HadoopResourceService(config);
         resourceService.addDataService(simpleConnection);
     }
 
@@ -299,22 +296,12 @@ public class HadoopResourceServiceTest {
     @Test
     public void shouldJSONSerialiser() throws Exception {
         //use local copy for this test
-        final HadoopResourceService service = new HadoopResourceService(config, simpleCache);
+        final HadoopResourceService service = new HadoopResourceService(config);
 
         final byte[] serialise = JSONSerialiser.serialise(service, true);
         final String expected = String.format("{%n" +
                 "  \"@id\" : 1,%n" +
                 "  \"class\" : \"uk.gov.gchq.palisade.service.resource.service.HadoopResourceService\",%n" +
-                "  \"cacheService\" : {%n" +
-                "    \"@id\" : 2,%n" +
-                "    \"class\" : \"uk.gov.gchq.palisade.service.resource.repository.SimpleCacheService\",%n" +
-                "    \"backingStore\" : {%n" +
-                "      \"class\" : \"uk.gov.gchq.palisade.service.resource.repository.HashMapBackingStore\",%n" +
-                "      \"useStatic\" : true%n" +
-                "    },%n" +
-                "    \"codecs\" : { },%n" +
-                "    \"maximumLocalCacheDuration\" : 300.000000000%n" +
-                "  },%n" +
                 "  \"conf\" : {%n" +
                 "  }%n" +
                 "}%n");
@@ -344,7 +331,7 @@ public class HadoopResourceServiceTest {
         //when
         try {
             //this test needs a local HDFS resource service
-            final CompletableFuture<Map<LeafResource, ConnectionDetail>> resourcesById = new HadoopResourceService(config, simpleCache)
+            final CompletableFuture<Map<LeafResource, ConnectionDetail>> resourcesById = new HadoopResourceService(config)
                     .getResourcesById(new GetResourcesByIdRequest().resourceId(FILE + id));
             resourcesById.get();
             fail("exception expected");
