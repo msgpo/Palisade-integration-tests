@@ -1,4 +1,4 @@
-uk.gov.gchq.palisade:resource-service-integration-tests:jar:0.4.0-SNAPSHOT
+uk.gov.gchq.palisade:resource-service-integration:jar:0.4.0-SNAPSHOT
 +- uk.gov.gchq.palisade:resource-service:jar:0.4.0-SNAPSHOT:compile
 |  +- com.netflix.eureka:eureka-client:jar:1.9.13:compile
 |  |  +- org.codehaus.jettison:jettison:jar:1.3.7:compile
