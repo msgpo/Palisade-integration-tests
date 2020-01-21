@@ -19,8 +19,7 @@ import uk.gov.gchq.palisade.service.audit.request.RegisterRequestExceptionAuditR
 
 import java.util.Collections;
 
-class AuditServiceTestCommon {
-
+class AuditTestCommon {
     static final long TEST_NUMBER_OF_RECORDS_PROCESSED = 20;
     static final long TEST_NUMBER_OF_RECORDS_RETURNED = 5;
     static final String TEST_TOKEN = "token in the form of a UUID";
@@ -30,7 +29,6 @@ class AuditServiceTestCommon {
     private static final String TEST_ORIGINAL_REQUEST_ID = "originalRequestId linking all logs from the same data access request together";
     private static final String TEST_DATA_TYPE = "data type of the resource, e.g. Employee";
     private static final String TEST_EXCEPTION_MESSAGE = "exception message";
-    private static final String TEST_SERVICE_CLASS_MESSAGE = "mocked service class, e.g. UserService";
 
     private static final String TEST_RULES_APPLIED = "human readable description of the rules/policies been applied to the data";
 
