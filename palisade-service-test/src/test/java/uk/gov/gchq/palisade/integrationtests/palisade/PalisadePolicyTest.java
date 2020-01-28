@@ -62,7 +62,7 @@ public class PalisadePolicyTest extends BaseTestEnvironment {
 
     @Test
     public void policyServiceTest() throws Exception {
-        policyServiceMock.stubFor(post(urlPathMatching("/getPolicy"))
+        policyServiceMock.stubFor(post(urlPathMatching("/getPolicySync"))
                 .withRequestBody(containing("user-id"))
                 .willReturn(
                         aResponse()

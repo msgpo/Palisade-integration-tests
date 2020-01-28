@@ -95,7 +95,7 @@ public class BaseTestEnvironment {
         LEAF_RESOURCE.setSerialisedFormat("json");
         LEAF_RESOURCE.setType("string");
     }
-    SimpleConnectionDetail CONNECTION_DETAIL = new SimpleConnectionDetail().service(new StubService());
+    SimpleConnectionDetail CONNECTION_DETAIL = new SimpleConnectionDetail().uri("http://localhost:8082");
     Map<LeafResource, ConnectionDetail> RESOURCE_INFO = Stream.of(new AbstractMap.SimpleEntry<>(LEAF_RESOURCE, CONNECTION_DETAIL)).collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
 
     UserId USER_ID = new UserId().id("user-id");
