@@ -37,7 +37,7 @@
             <groupId>uk.gov.gchq.palisade</groupId>
             <artifactId>resource-service</artifactId>
             <version>${project.parent.version}</version>
-            <classifier>jar-with-dependencies</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
