@@ -17,7 +17,7 @@ VOLUME /tmp
 
 ARG JAR_FILE
 
-COPY $JAR_FILE /usr/share/palisade-service/palisade-service-test.jar
+ADD $JAR_FILE /usr/share/palisade-service/palisade-service-test.jar
 
 LABEL service="palisade-test" project="integration-tests"
 
