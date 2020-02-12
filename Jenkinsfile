@@ -96,7 +96,7 @@ spec:
         }
         stage('Hadolinting') {
                     container('hadolint') {
-                        sh 'hadolint */Dockerfile
+                        sh 'hadolint */Dockerfile'
                     }
                 }
     }

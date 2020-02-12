@@ -19,6 +19,6 @@ ARG JAR_FILE
 
 COPY $JAR_FILE /usr/share/palisade-service/palisade-service-test.jar
 
-LABEL service="palisade-test" project="integration-tests"
+LABEL service="palisade-test", project="integration-tests"
 
 ENTRYPOINT ["java", "-jar", "/usr/share/palisade-service/palisade-service-test.jar"]
