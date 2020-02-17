@@ -17,7 +17,7 @@ VOLUME /tmp
 
 ARG JAR_FILE
 
-ADD $JAR_FILE /usr/share/audit-service/audit-service-test.jar
+COPY $JAR_FILE /usr/share/audit-service/audit-service-test.jar
 
 LABEL service="audit-test" project="integration-tests"
 
