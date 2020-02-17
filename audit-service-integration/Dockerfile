@@ -19,6 +19,6 @@ ARG JAR_FILE
 
 ADD $JAR_FILE /usr/share/audit-service/audit-service-test.jar
 
-LABEL service="audit-test", project="integration-tests"
+LABEL service="audit-test" project="integration-tests"
 
 ENTRYPOINT ["java", "-jar", "/usr/share/audit-service/audit-service-test.jar"]
