@@ -26,8 +26,8 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AuditApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
-public class AuditEndToEndTest extends AuditTestCommon {
-    Logger LOGGER = LoggerFactory.getLogger(AuditEndToEndTest.class);
+public class AuditServiceComponentTest extends AuditTestCommon {
+    Logger LOGGER = LoggerFactory.getLogger(AuditServiceComponentTest.class);
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -55,7 +55,7 @@ public class AuditEndToEndTest extends AuditTestCommon {
     }
 
     @Test
-    public void endToEnd() {
+    public void componentTest() {
         requests.forEach(request -> {
             Boolean response = restTemplate.postForObject("/audit", request, Boolean.class);
 
