@@ -12,10 +12,7 @@ import uk.gov.gchq.palisade.resource.impl.FileResource;
 import uk.gov.gchq.palisade.resource.impl.SystemResource;
 import uk.gov.gchq.palisade.rule.Rules;
 import uk.gov.gchq.palisade.service.Service;
-import uk.gov.gchq.palisade.service.audit.request.ReadRequestCompleteAuditRequest;
-import uk.gov.gchq.palisade.service.audit.request.ReadRequestExceptionAuditRequest;
-import uk.gov.gchq.palisade.service.audit.request.RegisterRequestCompleteAuditRequest;
-import uk.gov.gchq.palisade.service.audit.request.RegisterRequestExceptionAuditRequest;
+import uk.gov.gchq.palisade.service.audit.request.AuditRequest;
 
 import java.util.Collections;
 
@@ -60,15 +57,15 @@ class AuditTestCommon {
         return new Rules<>().message(TEST_RULES_APPLIED);
     }
 
-    static RegisterRequestCompleteAuditRequest registerRequestCompleteAuditRequest() {
-        return RegisterRequestCompleteAuditRequest.create(mockOriginalRequestId())
+    static AuditRequest.RegisterRequestCompleteAuditRequest registerRequestCompleteAuditRequest() {
+        return AuditRequest.RegisterRequestCompleteAuditRequest.create(mockOriginalRequestId())
                 .withUser(mockUser())
                 .withLeafResources(Sets.newSet(mockResource()))
                 .withContext(mockContext());
     }
 
-    static RegisterRequestExceptionAuditRequest registerRequestExceptionAuditRequest() {
-        return RegisterRequestExceptionAuditRequest.create(mockOriginalRequestId())
+    static AuditRequest.RegisterRequestExceptionAuditRequest registerRequestExceptionAuditRequest() {
+        return AuditRequest.RegisterRequestExceptionAuditRequest.create(mockOriginalRequestId())
                 .withUserId(mockUserID())
                 .withResourceId(mockResource().getId())
                 .withContext(mockContext())
@@ -76,8 +73,8 @@ class AuditTestCommon {
                 .withServiceClass(Service.class);
     }
 
-    static ReadRequestCompleteAuditRequest readRequestCompleteAuditRequest() {
-        return ReadRequestCompleteAuditRequest.create(mockOriginalRequestId())
+    static AuditRequest.ReadRequestCompleteAuditRequest readRequestCompleteAuditRequest() {
+        return AuditRequest.ReadRequestCompleteAuditRequest.create(mockOriginalRequestId())
                 .withUser(mockUser())
                 .withLeafResource(mockResource())
                 .withContext(mockContext())
@@ -86,8 +83,8 @@ class AuditTestCommon {
                 .withNumberOfRecordsProcessed(TEST_NUMBER_OF_RECORDS_PROCESSED);
     }
 
-    static ReadRequestExceptionAuditRequest readRequestExceptionAuditRequest() {
-        return ReadRequestExceptionAuditRequest.create(mockOriginalRequestId())
+    static AuditRequest.ReadRequestExceptionAuditRequest readRequestExceptionAuditRequest() {
+        return AuditRequest.ReadRequestExceptionAuditRequest.create(mockOriginalRequestId())
                 .withToken(TEST_TOKEN)
                 .withLeafResource(mockResource())
                 .withException(mockException());
