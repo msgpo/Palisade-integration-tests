@@ -50,8 +50,9 @@ public class PalisadeServiceMock {
         DataRequestResponse response = new DataRequestResponse().token("mock-token").resources(resources);
 
         serviceMock.stubFor(post(urlEqualTo("/registerDataRequest"))
-            .willReturn(
-                okJson(serializer.writeValueAsString(response))
-            ));
+                .willReturn(
+                        okJson(serializer.writeValueAsString(response))
+                ));
     }
+
 }
