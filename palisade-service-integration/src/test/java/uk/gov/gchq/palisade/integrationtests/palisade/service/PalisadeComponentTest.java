@@ -169,6 +169,7 @@ public class PalisadeComponentTest {
         // Given a data request has been registered
         RegisterDataRequest dataRequest = new RegisterDataRequest().userId(new UserId().id("user-id")).resourceId("resource-id").context(new Context().purpose("purpose"));
         DataRequestResponse dataResponse = restTemplate.postForObject("/registerDataRequest", dataRequest, DataRequestResponse.class);
+        assertNotNull(dataResponse);
 
         // When the data service requests the request config
         for (Resource resource : ResourceServiceMock.getResources().keySet()) {
