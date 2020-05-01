@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 podTemplate(yaml: '''
 apiVersion: v1
 kind: Pod
@@ -70,31 +71,54 @@ spec:
          path: /var/run
 ''') {
     node(POD_LABEL) {
+        def GIT_BRANCH_NAME
+
         stage('Bootstrap') {
-            echo sh(script: 'env|sort', returnStdout: true)
+            if (env.CHANGE_BRANCH) {
+                GIT_BRANCH_NAME=env.CHANGE_BRANCH
+            } else {
+                GIT_BRANCH_NAME=env.BRANCH_NAME
+            }
+            echo sh(script: 'env | sort', returnStdout: true)
         }
-        stage('Build Palisade Services') {
-            //Repositories must get built in their own directory, they can be 'cd' back into later on
-            dir("Palisade-services") {
+
+        stage('Prerequisites') {
+            dir('Palisade-common') {
+                git url: 'https://github.com/gchq/Palisade-common.git'
+                if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0) {
+                    container('docker-cmds') {
+                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
+                        }
+                    }
+                }
+            }
+            dir('Palisade-readers') {
+                git url: 'https://github.com/gchq/Palisade-readers.git'
+                if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0) {
+                    container('docker-cmds') {
+                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
+                        }
+                    }
+                }
+            }
+            dir('Palisade-services') {
                 git url: 'https://github.com/gchq/Palisade-services.git'
-                sh "git fetch origin develop"
-                // CHANGE_BRANCH will be null unless you are building a PR, in which case it'll become your original branch name, i.e pal-xxx
-                // If CHANGE_BRANCH is null, git will then try to build BRANCH_NAME which is pal-xxx, and if the branch doesnt exist it will default back to develop
-                sh "git checkout ${env.CHANGE_BRANCH} || git checkout ${env.BRANCH_NAME} || git checkout develop"
-                container('docker-cmds') {
-                    configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                        sh 'mvn -s $MAVEN_SETTINGS install'
+                if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0) {
+                    container('docker-cmds') {
+                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
+                        }
                     }
                 }
             }
         }
-        stage('Install a Maven project') {
-            dir("Palisade-integration-tests") {
+
+        stage('Integration Tests, Checkstyle') {
+            dir('Palisade-integration-tests') {
                 git url: 'https://github.com/gchq/Palisade-integration-tests.git'
-                sh "git fetch origin develop"
-                // CHANGE_BRANCH will be null unless you are building a PR, in which case it'll become your original branch name, i.e pal-xxx
-                // If CHANGE_BRANCH is null, git will then try to build BRANCH_NAME which is pal-xxx, and if the branch doesnt exist it will default back to develop
-                sh "git checkout ${env.CHANGE_BRANCH} || git checkout ${env.BRANCH_NAME} || git checkout develop"
+                sh "git checkout ${GIT_BRANCH_NAME}"
                 container('docker-cmds') {
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                         sh 'mvn -s $MAVEN_SETTINGS install'
@@ -102,6 +126,7 @@ spec:
                 }
             }
         }
+
         stage('Hadolinting') {
             dir("Palisade-integration-tests") {
                 container('hadolint') {
