@@ -13,11 +13,8 @@
 # limitations under the License.
 #
 spring:
-  cache:
-    caffeine:
-      spec: expireAfterWrite=2s, maximumSize=100
   application:
-    name: user-service
+    name: audit-service
   output:
     ansi:
       enabled: always
@@ -25,28 +22,19 @@ spring:
     allow-bean-definition-overriding: true
 
 server:
-  port: 8087
-
-eureka:
-  client:
-    enabled: false
+  port: 8088
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-    loggers:
+  endpoint:
+    shutdown:
       enabled: true
 
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: 5000
-        readTimeout: 5000
-        loggerLevel: basic
-    default-config: default
-
-user-service:
-  implementation: null-user-service
+audit:
+  implementations:
+    stroom:
+    logger:
+    simple:
