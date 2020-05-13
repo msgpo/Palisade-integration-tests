@@ -41,8 +41,8 @@ spec:
       privileged: true
     resources: 
       requests: 
-        cpu: 20m 
-        memory: 512Mi 
+        cpu: 500m
+        memory: 2Gi
     volumeMounts: 
       - name: docker-graph-storage 
         mountPath: /var/lib/docker 
@@ -105,7 +105,15 @@ spec:
             }
             dir('Palisade-services') {
                 git url: 'https://github.com/gchq/Palisade-services.git'
-                if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0) {
+                if (env.BRANCH_NAME.substring(0, 2) == "PR") {
+                    sh "git checkout ${GIT_BRANCH_NAME} || git checkout develop"
+                    container('docker-cmds') {
+                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
+                        }
+                    }
+                }
+                else if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0) {
                     container('docker-cmds') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                             sh 'mvn -s $MAVEN_SETTINGS install -P quick'
@@ -131,6 +139,29 @@ spec:
             dir("Palisade-integration-tests") {
                 container('hadolint') {
                     sh 'hadolint */Dockerfile'
+                }
+            }
+        }
+        stage('Run the JVM Example') {
+                // Always run some sort of smoke test if this is a Pull Request
+                if (env.BRANCH_NAME.substring(0, 2) == "PR") {
+                    // If this branch name exists in examples, use that
+                    // Otherwise, default to examples/develop
+                    dir ('Palisade-examples') {
+                        git url: 'https://github.com/gchq/Palisade-examples.git'
+                        sh "git checkout ${GIT_BRANCH_NAME} || git checkout develop"
+                    container('docker-cmds') {
+                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                            sh '''
+                                mvn -s $MAVEN_SETTINGS install -P quick
+
+                                bash deployment/local-jvm/bash-scripts/startServices.sh
+                                bash deployment/local-jvm/bash-scripts/configureExamples.sh
+                                bash deployment/local-jvm/bash-scripts/runFormattedLocalJVMExample.sh | tee deployment/local-jvm/bash-scripts/exampleOutput.txt
+                                bash deployment/local-jvm/bash-scripts/verify.sh
+                            '''
+                        }
+                    }
                 }
             }
         }
