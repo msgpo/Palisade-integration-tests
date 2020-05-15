@@ -72,7 +72,6 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 public class DataComponentTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataComponentTest.class);
     private static final Employee EMPLOYEE = DataServiceMock.testEmployee();
     private final ObjectMapper objectMapper = JSONSerialiser.createDefaultMapper();
 
@@ -91,9 +90,7 @@ public class DataComponentTest {
     @Before
     public void setUp() throws JsonProcessingException {
         AuditServiceMock.stubRule(auditMock, objectMapper);
-        AuditServiceMock.stubHealthRule(auditMock, objectMapper);
         PalisadeServiceMock.stubRule(palisadeMock, objectMapper);
-        PalisadeServiceMock.stubHealthRule(palisadeMock, objectMapper);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         avroSerialiser = new AvroSerialiser<>(Employee.class);
     }
@@ -106,33 +103,8 @@ public class DataComponentTest {
 
     @Test
     public void isUp() {
-        assertTrue(palisadeMock.isRunning());
-        assertTrue(auditMock.isRunning());
-
         Response health = client.getHealth();
         assertThat(health.status(), equalTo(200));
-    }
-
-    @Test
-    public void allServicesDown() {
-        // Given audit and palisade services are down
-        auditMock.stop();
-        palisadeMock.stop();
-        // Then the Data Service also reports down.
-        final Response downHealth = client.getHealth();
-        assertThat(downHealth.status(), equalTo(503));
-
-        // When only the palisade-service is started
-        palisadeMock.start();
-        // Then Data service still shows as down
-        final Response auditDownHealth = client.getHealth();
-        assertThat(auditDownHealth.status(), equalTo(503));
-
-        // When the audit-service is started as well
-        auditMock.start();
-        // Then Data service shows as up
-        final Response allUpHealth = client.getHealth();
-        assertThat(allUpHealth.status(), equalTo(200));
     }
 
     @Test
