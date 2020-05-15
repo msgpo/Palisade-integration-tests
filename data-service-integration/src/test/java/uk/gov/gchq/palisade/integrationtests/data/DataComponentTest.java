@@ -109,9 +109,6 @@ public class DataComponentTest {
 
     @Test
     public void readChunkedTest() throws Exception {
-        // Given - all the required services are running
-        assertTrue(auditMock.isRunning());
-        assertTrue(palisadeMock.isRunning());
 
         // Given - ReadRequest created
         Path currentPath = Paths.get("./resources/data/employee_file0.avro").toAbsolutePath().normalize();
