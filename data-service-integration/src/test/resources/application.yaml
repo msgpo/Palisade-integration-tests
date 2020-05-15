@@ -47,6 +47,6 @@ feign:
 
 web:
   client:
-    audit-service: http://localhost:8088
+    audit-service: http://localhost:8098
     data-service: http://localhost:${server.port}
     palisade-service: http://localhost:8084
