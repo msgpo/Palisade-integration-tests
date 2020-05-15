@@ -25,8 +25,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -63,7 +61,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 @EnableFeignClients
 @RunWith(SpringRunner.class)
@@ -109,7 +106,6 @@ public class DataComponentTest {
 
     @Test
     public void readChunkedTest() throws Exception {
-
         // Given - ReadRequest created
         Path currentPath = Paths.get("./resources/data/employee_file0.avro").toAbsolutePath().normalize();
         FileResource resource = TestUtil.createFileResource(currentPath, "employee");
