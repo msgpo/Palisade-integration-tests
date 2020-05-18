@@ -156,9 +156,7 @@ spec:
                                 mvn -s $MAVEN_SETTINGS install -P quick
 
                                 bash deployment/local-jvm/bash-scripts/startServices.sh
-                                cd ../Palisade-services
-                                cat rest-example.log
-                                cat palisade-service-example.log
+                                bash deployment/local-jvm/bash-scripts/verify.sh
                             '''
                         }
                     }
