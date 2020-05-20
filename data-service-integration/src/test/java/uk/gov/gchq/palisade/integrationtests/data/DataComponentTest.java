@@ -48,7 +48,6 @@ import uk.gov.gchq.palisade.jsonserialisation.JSONSerialiser;
 import uk.gov.gchq.palisade.reader.common.DataFlavour;
 import uk.gov.gchq.palisade.resource.impl.FileResource;
 import uk.gov.gchq.palisade.service.data.DataApplication;
-import uk.gov.gchq.palisade.service.data.request.AddSerialiserRequest;
 import uk.gov.gchq.palisade.service.data.request.ReadRequest;
 import uk.gov.gchq.palisade.service.data.service.DataService;
 
@@ -148,10 +147,7 @@ public class DataComponentTest {
         readRequest.setOriginalRequestId(new RequestId().id("original"));
 
         // Given - AvroSerialiser added to Data-service
-        AddSerialiserRequest serialiserRequest = new AddSerialiserRequest()
-                .dataFlavour(DataFlavour.of("employee", "avro"))
-                .serialiser(avroSerialiser);
-        client.addSerialiser(serialiserRequest);
+        client.addSerialiser(DataFlavour.of("employee", "avro"), avroSerialiser);
 
         // When
         Set<Employee> readResult = client.readChunked(readRequest).collect(Collectors.toSet());
