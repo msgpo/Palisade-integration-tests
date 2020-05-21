@@ -142,12 +142,12 @@ public class DataComponentTest {
 
         // Given - ReadRequest created
         Path currentPath = Paths.get("./resources/data/employee_file0.avro").toAbsolutePath().normalize();
-        FileResource resource = TestUtil.createFileResource(currentPath, "employee");
+        FileResource resource = TestUtil.createFileResource(currentPath, "uk.gov.gchq.palisade.example.hrdatagenerator.types.Employee");
         ReadRequest readRequest = new ReadRequest().token("token").resource(resource);
         readRequest.setOriginalRequestId(new RequestId().id("original"));
 
         // Given - AvroSerialiser added to Data-service
-        client.addSerialiser(DataFlavour.of("employee", "avro"), avroSerialiser);
+        client.addSerialiser(DataFlavour.of("uk.gov.gchq.palisade.example.hrdatagenerator.types.Employee", "avro"), avroSerialiser);
 
         // When
         Set<Employee> readResult = client.readChunked(readRequest).collect(Collectors.toSet());
