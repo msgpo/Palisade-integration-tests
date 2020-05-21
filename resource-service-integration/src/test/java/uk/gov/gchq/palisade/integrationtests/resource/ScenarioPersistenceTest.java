@@ -93,6 +93,7 @@ public class ScenarioPersistenceTest {
 
     static {
         new File(ROOT_PATH + "empty-dir/").mkdir();
+        HadoopResourceDetails.addTypeSupport("String", "java.lang.String");
     }
 
     /**
@@ -136,7 +137,6 @@ public class ScenarioPersistenceTest {
     @Test
     @Transactional(readOnly = true)
     public void runThroughTestScenario() {
-        HadoopResourceDetails.SUPPORTED_TYPES.put("txt", "java.lang.String");
         Set<LeafResource> returned;
         Set<LeafResource> expectedReturned;
         Set<Resource> persisted;

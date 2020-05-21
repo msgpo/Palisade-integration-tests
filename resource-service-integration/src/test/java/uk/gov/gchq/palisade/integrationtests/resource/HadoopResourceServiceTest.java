@@ -118,7 +118,7 @@ public class HadoopResourceServiceTest {
 
         resourceService = new HadoopResourceService(config);
         resourceService.addDataService(connectionDetail);
-        HadoopResourceDetails.SUPPORTED_TYPES.put("bob", "bob");
+        HadoopResourceDetails.addTypeSupport(TYPE_VALUE, TYPE_VALUE);
     }
 
     @Test
