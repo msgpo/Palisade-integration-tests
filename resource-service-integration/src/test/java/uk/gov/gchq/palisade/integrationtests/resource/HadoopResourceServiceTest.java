@@ -36,6 +36,7 @@ import uk.gov.gchq.palisade.resource.impl.FileResource;
 import uk.gov.gchq.palisade.service.ConnectionDetail;
 import uk.gov.gchq.palisade.service.SimpleConnectionDetail;
 import uk.gov.gchq.palisade.service.resource.service.HadoopResourceService;
+import uk.gov.gchq.palisade.service.resource.util.HadoopResourceDetails;
 import uk.gov.gchq.palisade.util.ResourceBuilder;
 
 import java.io.BufferedWriter;
@@ -117,6 +118,7 @@ public class HadoopResourceServiceTest {
 
         resourceService = new HadoopResourceService(config);
         resourceService.addDataService(connectionDetail);
+        HadoopResourceDetails.SUPPORTED_TYPES.put("bob", "bob");
     }
 
     @Test
