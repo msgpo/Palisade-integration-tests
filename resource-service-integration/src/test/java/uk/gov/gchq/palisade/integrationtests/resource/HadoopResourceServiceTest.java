@@ -107,18 +107,18 @@ public class HadoopResourceServiceTest {
         ConnectionDetail connectionDetail = new SimpleConnectionDetail().uri("data-service");
         id1 = dir.resolve(getFileNameFromResourceDetails(FILE_NAME_VALUE_00001, TYPE_VALUE, FORMAT_VALUE));
         resource1 = ((LeafResource) ResourceBuilder.create(id1))
-                .type(TYPE_VALUE)
+                .type("com.type.bob")
                 .serialisedFormat(FORMAT_VALUE)
                 .connectionDetail(connectionDetail);
         id2 = dir.resolve(getFileNameFromResourceDetails(FILE_NAME_VALUE_00002, TYPE_VALUE, FORMAT_VALUE));
         resource2 = ((LeafResource) ResourceBuilder.create(id2))
-                .type(TYPE_VALUE)
+                .type("com.type.bob")
                 .serialisedFormat(FORMAT_VALUE)
                 .connectionDetail(connectionDetail);
 
         resourceService = new HadoopResourceService(config);
         resourceService.addDataService(connectionDetail);
-        HadoopResourceDetails.addTypeSupport(TYPE_VALUE, TYPE_VALUE);
+        HadoopResourceDetails.addTypeSupport(TYPE_VALUE, "com.type.bob");
     }
 
     @Test
@@ -179,7 +179,7 @@ public class HadoopResourceServiceTest {
         writeFile(fs, dir, "00003", FORMAT_VALUE, "not" + TYPE_VALUE);
 
         //when
-        final Stream<LeafResource> resourcesByType = resourceService.getResourcesByType(TYPE_VALUE);
+        final Stream<LeafResource> resourcesByType = resourceService.getResourcesByType("com.type.bob");
 
         //then
         Set<LeafResource> expected = new HashSet<>(Arrays.asList(resource1, resource2));
