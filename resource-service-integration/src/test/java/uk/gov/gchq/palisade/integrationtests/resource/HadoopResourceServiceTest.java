@@ -178,6 +178,7 @@ public class HadoopResourceServiceTest {
     public void shouldGetResourcesByType() throws Exception {
         //given
         writeFile(fs, dir, "00003", FORMAT_VALUE, "not" + TYPE_VALUE);
+        HadoopResourceDetails.addTypeSupport("not" + TYPE_VALUE, TYPE_CLASSNAME + ".not");
 
         //when
         final Stream<LeafResource> resourcesByType = resourceService.getResourcesByType(TYPE_CLASSNAME);
