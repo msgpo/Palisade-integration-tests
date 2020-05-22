@@ -64,7 +64,7 @@ public class HadoopResourceServiceTest {
 
     private static final String FORMAT_VALUE = "txt";
     private static final String TYPE_VALUE = "bob";
-    private static final String RES_TYPE_VALUE = "com.type.bob";
+    private static final String TYPE_CLASSNAME = "com.type.bob";
     private static final String FILE_NAME_VALUE_00001 = "00001";
     private static final String FILE_NAME_VALUE_00002 = "00002";
     private static final boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().startsWith("win");
@@ -108,18 +108,18 @@ public class HadoopResourceServiceTest {
         ConnectionDetail connectionDetail = new SimpleConnectionDetail().uri("data-service");
         id1 = dir.resolve(getFileNameFromResourceDetails(FILE_NAME_VALUE_00001, TYPE_VALUE, FORMAT_VALUE));
         resource1 = ((LeafResource) ResourceBuilder.create(id1))
-                .type(RES_TYPE_VALUE)
+                .type(TYPE_CLASSNAME)
                 .serialisedFormat(FORMAT_VALUE)
                 .connectionDetail(connectionDetail);
         id2 = dir.resolve(getFileNameFromResourceDetails(FILE_NAME_VALUE_00002, TYPE_VALUE, FORMAT_VALUE));
         resource2 = ((LeafResource) ResourceBuilder.create(id2))
-                .type(RES_TYPE_VALUE)
+                .type(TYPE_CLASSNAME)
                 .serialisedFormat(FORMAT_VALUE)
                 .connectionDetail(connectionDetail);
 
         resourceService = new HadoopResourceService(config);
         resourceService.addDataService(connectionDetail);
-        HadoopResourceDetails.addTypeSupport(TYPE_VALUE, RES_TYPE_VALUE);
+        HadoopResourceDetails.addTypeSupport(TYPE_VALUE, TYPE_CLASSNAME);
     }
 
     @Test
@@ -180,7 +180,7 @@ public class HadoopResourceServiceTest {
         writeFile(fs, dir, "00003", FORMAT_VALUE, "not" + TYPE_VALUE);
 
         //when
-        final Stream<LeafResource> resourcesByType = resourceService.getResourcesByType(RES_TYPE_VALUE);
+        final Stream<LeafResource> resourcesByType = resourceService.getResourcesByType(TYPE_CLASSNAME);
 
         //then
         Set<LeafResource> expected = new HashSet<>(Arrays.asList(resource1, resource2));

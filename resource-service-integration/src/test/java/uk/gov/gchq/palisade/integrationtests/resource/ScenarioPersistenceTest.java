@@ -41,7 +41,6 @@ import uk.gov.gchq.palisade.service.ConnectionDetail;
 import uk.gov.gchq.palisade.service.SimpleConnectionDetail;
 import uk.gov.gchq.palisade.service.resource.ResourceApplication;
 import uk.gov.gchq.palisade.service.resource.repository.JpaPersistenceLayer;
-import uk.gov.gchq.palisade.service.resource.util.HadoopResourceDetails;
 import uk.gov.gchq.palisade.util.ResourceBuilder;
 
 import java.io.File;
@@ -93,7 +92,6 @@ public class ScenarioPersistenceTest {
 
     static {
         new File(ROOT_PATH + "empty-dir/").mkdir();
-        HadoopResourceDetails.addTypeSupport("String", "java.lang.String");
     }
 
     /**
