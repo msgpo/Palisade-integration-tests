@@ -48,7 +48,6 @@ import uk.gov.gchq.palisade.jsonserialisation.JSONSerialiser;
 import uk.gov.gchq.palisade.reader.common.DataFlavour;
 import uk.gov.gchq.palisade.resource.impl.FileResource;
 import uk.gov.gchq.palisade.service.data.DataApplication;
-import uk.gov.gchq.palisade.service.data.request.AddSerialiserRequest;
 import uk.gov.gchq.palisade.service.data.request.ReadRequest;
 import uk.gov.gchq.palisade.service.data.service.DataService;
 
@@ -143,15 +142,12 @@ public class DataComponentTest {
 
         // Given - ReadRequest created
         Path currentPath = Paths.get("./resources/data/employee_file0.avro").toAbsolutePath().normalize();
-        FileResource resource = TestUtil.createFileResource(currentPath, "employee");
+        FileResource resource = TestUtil.createFileResource(currentPath, "uk.gov.gchq.palisade.example.hrdatagenerator.types.Employee");
         ReadRequest readRequest = new ReadRequest().token("token").resource(resource);
         readRequest.setOriginalRequestId(new RequestId().id("original"));
 
         // Given - AvroSerialiser added to Data-service
-        AddSerialiserRequest serialiserRequest = new AddSerialiserRequest()
-                .dataFlavour(DataFlavour.of("employee", "avro"))
-                .serialiser(avroSerialiser);
-        client.addSerialiser(serialiserRequest);
+        client.addSerialiser(DataFlavour.of("uk.gov.gchq.palisade.example.hrdatagenerator.types.Employee", "avro"), avroSerialiser);
 
         // When
         Set<Employee> readResult = client.readChunked(readRequest).collect(Collectors.toSet());

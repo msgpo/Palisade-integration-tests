@@ -13,34 +13,8 @@
 # limitations under the License.
 #
 spring:
-  cache:
-    caffeine:
-      spec: expireAfterWrite=2s, maximumSize=100
   application:
-    name: policy-service
-  output:
-    ansi:
-      enabled: always
-  main:
-    allow-bean-definition-overriding: true
-
-server:
-  port: 8085
-
-eureka:
-  client:
-    enabled: false
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    shutdown:
-      enabled: true
-
-population:
-  policyProvider: std
-  userProvider: std
-  resourceProvider: std
+    name: resource-service
+  cloud:
+    config:
+      enabled: false

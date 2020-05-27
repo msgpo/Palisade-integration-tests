@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.gchq.palisade.integrationtests.policy;
+package uk.gov.gchq.palisade.integrationtests.policy.config;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import uk.gov.gchq.palisade.service.PolicyConfiguration;
+import uk.gov.gchq.palisade.service.ResourceConfiguration;
 import uk.gov.gchq.palisade.service.UserConfiguration;
 import uk.gov.gchq.palisade.service.policy.config.StdPolicyConfiguration;
+import uk.gov.gchq.palisade.service.policy.config.StdResourceConfiguration;
 import uk.gov.gchq.palisade.service.policy.config.StdUserConfiguration;
 import uk.gov.gchq.palisade.service.policy.service.NullPolicyService;
 import uk.gov.gchq.palisade.service.policy.service.PolicyService;
@@ -34,16 +36,19 @@ import uk.gov.gchq.palisade.service.policy.service.PolicyService;
 @TestConfiguration
 public class PolicyTestConfiguration {
 
-
     @Bean
     public PolicyConfiguration policyConfiguration() {
         return new StdPolicyConfiguration();
     }
 
-
     @Bean
     public UserConfiguration userConfiguration() {
         return new StdUserConfiguration();
+    }
+
+    @Bean
+    public ResourceConfiguration resourceConfiguration() {
+        return new StdResourceConfiguration();
     }
 
     @Bean
