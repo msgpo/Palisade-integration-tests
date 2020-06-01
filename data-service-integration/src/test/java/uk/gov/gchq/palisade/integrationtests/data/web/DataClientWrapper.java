@@ -16,7 +16,6 @@
 
 package uk.gov.gchq.palisade.integrationtests.data.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +26,8 @@ import uk.gov.gchq.palisade.example.hrdatagenerator.types.Employee;
 import uk.gov.gchq.palisade.reader.common.DataFlavour;
 import uk.gov.gchq.palisade.resource.LeafResource;
 import uk.gov.gchq.palisade.service.Service;
-import uk.gov.gchq.palisade.service.data.request.AddSerialiserRequest;
 import uk.gov.gchq.palisade.service.data.request.ReadRequest;
+import uk.gov.gchq.palisade.service.data.service.DataService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,12 +38,12 @@ public class DataClientWrapper implements Service {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataClientWrapper.class);
     private final DataClient client;
-    private final ObjectMapper mapper;
+    private final DataService service;
     private final Serialiser<Employee> serialiser = new AvroSerialiser<>(Employee.class);
 
-    public DataClientWrapper(final DataClient client, final ObjectMapper mapper) {
+    public DataClientWrapper(final DataClient client, final DataService service) {
         this.client = client;
-        this.mapper = mapper;
+        this.service = service;
     }
 
     /**
@@ -79,11 +78,12 @@ public class DataClientWrapper implements Service {
     /**
      * Add a serialiser to the data-service so that it can deserialise the data
      *
-     * @param request   an {@link AddSerialiserRequest} that conatins the {@link Serialiser} and the {@link DataFlavour}
-     * @return          a {@link Boolean} value
+     * @param dataFlavour   a {@link DataFlavour} containing a type and format value
+     * @param serialiser    a {@link Serialiser} that will be added
+     * @return              a {@link Boolean} value
      */
-    public Boolean addSerialiser(final AddSerialiserRequest request) {
-        return client.addSerialiser(request);
+    public Boolean addSerialiser(final DataFlavour dataFlavour, final Serialiser<?> serialiser) {
+        return service.addSerialiser(dataFlavour, serialiser);
     }
 
     /**
