@@ -50,7 +50,7 @@ public class PalisadeServiceMock {
     public static DataRequestConfig getDataRequestConfig() throws JsonProcessingException {
         Map<LeafResource, Rules> leafResourceToRules = new HashMap<>();
         Path path = Paths.get("./resources/data/employee_file0.avro").toAbsolutePath().normalize();
-        FileResource resource = TestUtil.createFileResource(path, "employee");
+        FileResource resource = TestUtil.createFileResource(path, "uk.gov.gchq.palisade.example.hrdatagenerator.types.Employee");
         Rules rules = new Rules().rule("Test Rule", new PassThroughRule<>());
         leafResourceToRules.put(resource, rules);
 
