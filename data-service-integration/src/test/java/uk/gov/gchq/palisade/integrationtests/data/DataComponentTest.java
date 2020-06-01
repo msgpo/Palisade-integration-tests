@@ -26,7 +26,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -66,7 +65,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringRunner.class)
 @Import(DataTestConfiguration.class)
 @SpringBootTest(classes = DataApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
-@AutoConfigureMockMvc
 public class DataComponentTest {
 
     private static final Employee EMPLOYEE = DataServiceMock.testEmployee();
@@ -105,7 +103,7 @@ public class DataComponentTest {
     }
 
     @Test
-    public void readChunkedTest() throws Exception {
+    public void readChunkedTest() {
         // Given - ReadRequest created
         Path currentPath = Paths.get("./resources/data/employee_file0.avro").toAbsolutePath().normalize();
         FileResource resource = TestUtil.createFileResource(currentPath, "employee");
