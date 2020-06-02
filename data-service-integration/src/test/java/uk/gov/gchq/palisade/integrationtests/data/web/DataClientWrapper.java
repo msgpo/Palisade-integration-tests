@@ -26,7 +26,6 @@ import uk.gov.gchq.palisade.example.hrdatagenerator.types.Employee;
 import uk.gov.gchq.palisade.reader.common.DataFlavour;
 import uk.gov.gchq.palisade.resource.LeafResource;
 import uk.gov.gchq.palisade.service.Service;
-import uk.gov.gchq.palisade.service.data.request.AddSerialiserRequest;
 import uk.gov.gchq.palisade.service.data.request.ReadRequest;
 import uk.gov.gchq.palisade.service.data.service.DataService;
 
@@ -84,8 +83,7 @@ public class DataClientWrapper implements Service {
      * @return              a {@link Boolean} value
      */
     public Boolean addSerialiser(final DataFlavour dataFlavour, final Serialiser<?> serialiser) {
-        final AddSerialiserRequest request = new AddSerialiserRequest();
-        return service.addSerialiser(request.dataFlavour(dataFlavour).serialiser(serialiser));
+        return service.addSerialiser(dataFlavour, serialiser);
     }
 
     /**
