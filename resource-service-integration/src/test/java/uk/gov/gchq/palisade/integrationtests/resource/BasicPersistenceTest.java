@@ -75,7 +75,7 @@ public class BasicPersistenceTest {
      * F   F  F
      */
 
-    private static final SimpleConnectionDetail DETAIL = new SimpleConnectionDetail().uri("test-data-service");
+    private static final SimpleConnectionDetail DETAIL = new SimpleConnectionDetail().serviceName("test-data-service");
     private static final String EMPLOYEE_TYPE = "employee";
     private static final String CLIENT_TYPE = "client";
     private static final String AVRO_FORMAT = "avro";
