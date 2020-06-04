@@ -87,7 +87,8 @@ public class ScenarioPersistenceTest {
     @Autowired
     private ResourceClientWrapper client;
 
-    private static final ConnectionDetail DETAIL = new SimpleConnectionDetail().serviceName("test-data-service");
+    private static final ConnectionDetail DETAIL = new SimpleConnectionDetail().serviceName("http://localhost:8082");
+
 
     private static final String ROOT_PATH =  System.getProperty("user.dir") + "/src/test/resources/root/";
 
