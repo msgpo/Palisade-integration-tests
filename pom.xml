@@ -29,6 +29,7 @@
     <version>0.4.0-${revision}</version>
     <name>palisade-integration-tests</name>
     <description>Integration tests for palisade</description>
+    <url>https://github.com/gchq/Palisade-integration-tests</url>
     <packaging>pom</packaging>
 
     <developers>
@@ -58,7 +59,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <checkstyle.plugin.version>3.1.0</checkstyle.plugin.version>
         <checkstyle.phase>verify</checkstyle.phase>
-        <depends.phase>validate</depends.phase>
+        <depends.phase>prepare-package</depends.phase>
         <depends.maven.version>3.1.1</depends.maven.version>
         <!-- Sonar -->
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>

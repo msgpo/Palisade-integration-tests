@@ -26,7 +26,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <!--  *********** Aritfact ID ***********    -->
     <artifactId>policy-service-integration</artifactId>
+    <url>https://github.com/gchq/Palisade-integration-tests/tree/develop/policy-service-integration</url>
+    <!--  *********** Aritfact ID ***********    -->
 
     <properties>
         <wiremock.version>2.20.0</wiremock.version>

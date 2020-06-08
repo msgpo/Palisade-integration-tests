@@ -12,7 +12,7 @@ List of third-party dependencies grouped by their license type
 * Spring Boot Web Starter ([org.springframework.boot:spring-boot-starter-web:2.2.0.RELEASE](https://projects.spring.io/spring-boot/#/spring-boot-parent/spring-boot-starters/spring-boot-starter-web))
 * Spring Cloud Starter OpenFeign ([org.springframework.cloud:spring-cloud-starter-openfeign:2.2.0.RELEASE](https://projects.spring.io/spring-cloud))
 * audit-service ([uk.gov.gchq.palisade:audit-service:0.4.0-SNAPSHOT](no url defined))
-* common ([uk.gov.gchq.palisade:common:0.4.0-SNAPSHOT](no url defined))
+* common ([uk.gov.gchq.palisade:common:0.4.0-SNAPSHOT](https://github.com/gchq/Palisade-common))
 * data-service ([uk.gov.gchq.palisade:data-service:0.4.0-SNAPSHOT](no url defined))
 * hr-data-generator ([uk.gov.gchq.palisade:hr-data-generator:0.4.0-SNAPSHOT](no url defined))
 * palisade-service ([uk.gov.gchq.palisade:palisade-service:0.4.0-SNAPSHOT](no url defined))

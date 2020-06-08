@@ -25,7 +25,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <!--  *********** Aritfact ID ***********    -->
     <artifactId>audit-service-integration</artifactId>
+    <url>https://github.com/gchq/Palisade-integration-tests/tree/develop/audit-service-integration</url>
+    <!--  *********** Aritfact ID ***********    -->
 
     <properties>
         <wiremock.version>2.20.0</wiremock.version>

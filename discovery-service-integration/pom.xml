@@ -25,6 +25,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <!--  *********** Aritfact ID ***********    -->
     <artifactId>discovery-service-integration</artifactId>
+    <url>https://github.com/gchq/Palisade-integration-tests/tree/develop/discovery-service-integration</url>
+    <!--  *********** Aritfact ID ***********    -->
 
 </project>
