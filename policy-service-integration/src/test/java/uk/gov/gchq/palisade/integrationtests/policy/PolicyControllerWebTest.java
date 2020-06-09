@@ -16,12 +16,10 @@
 package uk.gov.gchq.palisade.integrationtests.policy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -29,8 +27,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import uk.gov.gchq.palisade.integrationtests.policy.config.PolicyTestConfiguration;
 import uk.gov.gchq.palisade.service.policy.PolicyApplication;
@@ -57,19 +53,15 @@ import static uk.gov.gchq.palisade.integrationtests.policy.PolicyTestUtil.mockRe
 import static uk.gov.gchq.palisade.integrationtests.policy.PolicyTestUtil.mockUser;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = PolicyApplication.class)
 @Import(PolicyTestConfiguration.class)
+@ContextConfiguration(classes = PolicyApplication.class)
 @WebMvcTest(PolicyController.class)
-@AutoConfigureMockMvc
 public class PolicyControllerWebTest {
 
     public static final String CAN_ACCESS_REQUEST_URL = "/canAccess";
     public static final String GET_POLICY_SYNC_URL = "/getPolicySync";
     public static final String SET_RESOURCE_POLICY_ASYNC_URL = "/setResourcePolicyAsync";
     public static final String SET_TYPE_POLICY_ASYNC_URL = "/setTypePolicyAsync";
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
 
     @MockBean
     @Qualifier("controller")
@@ -80,11 +72,6 @@ public class PolicyControllerWebTest {
 
     @Autowired
     private ObjectMapper mapper;
-
-    @Before
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
 
     /**
      * Tests the PolicyController for the service endpoint "/canAccess"
@@ -153,6 +140,7 @@ public class PolicyControllerWebTest {
      * 2) request is a doPut process
      * 3) request data is in JSON format for a SetResourcePolicyRequest object
      * 4) response status is 200 OK
+     *
      * @throws Exception if the test fails
      */
     @Test
@@ -177,6 +165,7 @@ public class PolicyControllerWebTest {
      * 2) request is a doPut process
      * 3) request data is in JSON format for a SetTypePolicyRequest object
      * 4) response status is 200 OK
+     *
      * @throws Exception if the test fails
      */
     @Test
