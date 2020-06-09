@@ -87,7 +87,7 @@ public class PolicyControllerWebTest {
 
 
     @Before
-    public void setup() {
+    public void setUp() {
         Mockito.when(policyService.canAccess(mockUser(), mockContext(), mockResource())).thenReturn(Optional.of(mockResource()));
     }
 
