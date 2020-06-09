@@ -48,10 +48,4 @@ public class PolicyTestConfiguration {
     public ResourceConfiguration resourceConfiguration() {
         return new StdResourceConfiguration();
     }
-
-//    @Bean
-//    public PolicyService policyService() {
-//        return new NullPolicyService();
-//    }
-
 }

@@ -16,8 +16,10 @@
 package uk.gov.gchq.palisade.integrationtests.policy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,10 +29,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import uk.gov.gchq.palisade.integrationtests.policy.config.PolicyTestConfiguration;
+import uk.gov.gchq.palisade.resource.LeafResource;
+import uk.gov.gchq.palisade.rule.Rules;
 import uk.gov.gchq.palisade.service.policy.PolicyApplication;
 import uk.gov.gchq.palisade.service.policy.request.CanAccessRequest;
+import uk.gov.gchq.palisade.service.policy.request.CanAccessResponse;
 import uk.gov.gchq.palisade.service.policy.request.GetPolicyRequest;
 import uk.gov.gchq.palisade.service.policy.request.SetResourcePolicyRequest;
 import uk.gov.gchq.palisade.service.policy.request.SetTypePolicyRequest;
@@ -38,8 +44,14 @@ import uk.gov.gchq.palisade.service.policy.service.PolicyService;
 import uk.gov.gchq.palisade.service.policy.web.PolicyController;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -73,6 +85,13 @@ public class PolicyControllerWebTest {
     @Autowired
     private ObjectMapper mapper;
 
+
+    @Before
+    public void setup() {
+        Mockito.when(policyService.canAccess(mockUser(), mockContext(), mockResource())).thenReturn(Optional.of(mockResource()));
+    }
+
+
     /**
      * Tests the PolicyController for the service endpoint "/canAccess"
      * It tests that the service endpoint for the following:
@@ -85,23 +104,30 @@ public class PolicyControllerWebTest {
      *
      * @throws Exception if the test fails
      */
-
     @Test
     public void shouldReturnCanAccess() throws Exception {
+        //GIVEN
         CanAccessRequest canAccessRequest = (new CanAccessRequest())
                 .context(mockContext())
                 .user(mockUser())
                 .resources(mockResources());
         canAccessRequest.originalRequestId(mockOriginalRequestId());
 
-        this.mockMvc.perform(post(CAN_ACCESS_REQUEST_URL)
+        //WHEN
+        MvcResult result = this.mockMvc.perform(post(CAN_ACCESS_REQUEST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .content(mapper.writeValueAsString(canAccessRequest)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(content().string(containsString("canAccessResources")));
+                .andExpect(content().string(containsString("canAccessResources")))
+                .andReturn();
+        CanAccessResponse response = mapper.readValue(result.getResponse().getContentAsString(), CanAccessResponse.class);
+
+        //THEN
+        Mockito.verify(policyService, times(1)).canAccess(mockUser(), mockContext(), mockResource());
+        assertThat(response.getCanAccessResources(), hasItem(mockResource()));
     }
 
     /**
@@ -117,6 +143,8 @@ public class PolicyControllerWebTest {
      */
     @Test
     public void shouldReturnPolicySync() throws Exception {
+
+        //GIVEN
         GetPolicyRequest getPolicyRequest = (new GetPolicyRequest())
                 .context(mockContext())
                 .user(mockUser())
@@ -124,13 +152,20 @@ public class PolicyControllerWebTest {
         getPolicyRequest.originalRequestId((mockOriginalRequestId()));
         String jsonGetPolicyRequestMessage = mapper.writeValueAsString(getPolicyRequest);
 
-        this.mockMvc.perform(post(GET_POLICY_SYNC_URL)
+        //WHEN
+        MvcResult result = this.mockMvc.perform(post(GET_POLICY_SYNC_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(StandardCharsets.UTF_8.name())
                 .content(jsonGetPolicyRequestMessage))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+
+        //THEN
+        Mockito.verify(policyService, times(1)).getPolicy(mockResource());
+        Map<LeafResource, Rules> response = mapper.readValue(result.getResponse().getContentAsString(), Map.class);
+        assertNotNull(response);
     }
 
     /**
@@ -145,11 +180,13 @@ public class PolicyControllerWebTest {
      */
     @Test
     public void shouldSetResourcePolicyAsync() throws Exception {
+        //GIVEN
         SetResourcePolicyRequest getSetResourcePolicyRequest = (new SetResourcePolicyRequest())
                 .policy(mockPolicy())
                 .resource(mockResource());
         String jsonSetResourcePolicyRequestMessage = mapper.writeValueAsString(getSetResourcePolicyRequest);
 
+        //WHEN
         this.mockMvc.perform(put(SET_RESOURCE_POLICY_ASYNC_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(StandardCharsets.UTF_8.name())
@@ -170,11 +207,13 @@ public class PolicyControllerWebTest {
      */
     @Test
     public void shouldSetTypePolicyAsync() throws Exception {
+        //GIVEN
         SetTypePolicyRequest setTypePolicyRequest = (new SetTypePolicyRequest())
                 .policy(mockPolicy())
                 .type("Test type");
         String jsonSetTypePolicyAsyncMessage = mapper.writeValueAsString(setTypePolicyRequest);
 
+        //WHEN
         this.mockMvc.perform(put(SET_TYPE_POLICY_ASYNC_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(StandardCharsets.UTF_8.name())
@@ -182,5 +221,4 @@ public class PolicyControllerWebTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-
 }
