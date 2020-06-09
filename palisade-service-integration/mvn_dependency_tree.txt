@@ -157,7 +157,6 @@ uk.gov.gchq.palisade:palisade-service-integration:jar:0.4.0-SNAPSHOT
 |     +- org.hdrhistogram:HdrHistogram:jar:2.1.11:compile
 |     \- org.latencyutils:LatencyUtils:jar:2.0.3:compile
 +- com.github.tomakehurst:wiremock-standalone:jar:2.20.0:test
-+- uk.gov.gchq.palisade:readers-common:jar:0.4.0-SNAPSHOT:test
 +- org.springframework.boot:spring-boot-starter-test:jar:2.2.0.RELEASE:test
 |  +- org.springframework.boot:spring-boot-test:jar:2.2.0.RELEASE:test
 |  +- org.springframework.boot:spring-boot-test-autoconfigure:jar:2.2.0.RELEASE:test
