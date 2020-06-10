@@ -16,17 +16,13 @@
 
 package uk.gov.gchq.palisade.integrationtests.palisade.mock;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import java.io.IOException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 
@@ -41,11 +37,6 @@ public class ResourceServiceMock {
     public static void stubRule(final WireMockRule serviceMock) throws IOException {
         serviceMock.stubFor(post(urlMatching("/getResourcesBy(Id|Resource|Type|SerialisedFormat)"))
                 .willReturn(aResponse().proxiedFrom("http://localhost:" + port + "/resource-service-mock")));
-    }
-
-    public static void stubHealthRule(final WireMockRule serviceMock, final ObjectMapper serializer) throws JsonProcessingException {
-        serviceMock.stubFor(get(urlEqualTo("/actuator/health"))
-                .willReturn(aResponse()));
     }
 
 }
