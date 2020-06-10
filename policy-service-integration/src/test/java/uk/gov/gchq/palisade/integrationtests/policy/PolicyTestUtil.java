@@ -119,7 +119,7 @@ public class PolicyTestUtil {
                 .id("TEST_RESOURCE_ID")
                 .type("data type of the resource, e.g. Employee")
                 .serialisedFormat("none")
-                .connectionDetail(new SimpleConnectionDetail().serviceName("test-data-service"))
+                .connectionDetail(new SimpleConnectionDetail().serviceName("data-service-mock"))
                 .parent((new DirectoryResource())
                         .id("resource")
                         .parent((new SystemResource())
