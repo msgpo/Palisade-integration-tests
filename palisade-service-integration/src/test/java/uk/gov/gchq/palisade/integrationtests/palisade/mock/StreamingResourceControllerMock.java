@@ -70,7 +70,7 @@ public class StreamingResourceControllerMock {
     };
 
     public static Stream<LeafResource> getResources() {
-        ConnectionDetail connectionDetail = new SimpleConnectionDetail().uri("data-service-mock");
+        ConnectionDetail connectionDetail = new SimpleConnectionDetail().serviceName("data-service-mock");
         LeafResource resource = ((FileResource) ResourceBuilder.create("file:/root/resource-id"))
                 .type("type")
                 .serialisedFormat("format")
