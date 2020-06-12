@@ -105,7 +105,7 @@ public class HadoopResourceServiceTest {
         writeFile(fs, dir, FILE_NAME_VALUE_00001, FORMAT_VALUE, TYPE_VALUE);
         writeFile(fs, dir, FILE_NAME_VALUE_00002, FORMAT_VALUE, TYPE_VALUE);
 
-        ConnectionDetail connectionDetail = new SimpleConnectionDetail().uri("data-service");
+        ConnectionDetail connectionDetail = new SimpleConnectionDetail().serviceName("data-service-mock");
         id1 = dir.resolve(getFileNameFromResourceDetails(FILE_NAME_VALUE_00001, TYPE_VALUE, FORMAT_VALUE));
         resource1 = ((LeafResource) ResourceBuilder.create(id1))
                 .type(TYPE_CLASSNAME)

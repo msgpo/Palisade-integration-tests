@@ -109,7 +109,7 @@ public class PolicyCachingProxyTest extends PolicyTestCommon {
     @Test
     public void cacheMaxSizeTest() {
         /// Given - the cache is overfilled
-        Function<Integer, Resource> makeResource = i -> new StubResource(i.toString(), i.toString(), i.toString(), new SimpleConnectionDetail().uri(i.toString()));
+        Function<Integer, Resource> makeResource = i -> new StubResource(i.toString(), i.toString(), i.toString(), new SimpleConnectionDetail().serviceName(i.toString()));
         Function<Integer, Policy> makePolicy = i -> new Policy<>().resourceLevelRule(i.toString(), new PassThroughRule<>());
         for (int count = 0; count <= 100; ++count) {
             cacheProxy.setResourcePolicy(makeResource.apply(count), makePolicy.apply(count));
