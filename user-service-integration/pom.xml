@@ -26,7 +26,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <!--  *********** Aritfact ID ***********    -->
     <artifactId>user-service-integration</artifactId>
+    <url>https://github.com/gchq/Palisade-integration-tests/tree/develop/user-service-integration</url>
+    <!--  *********** Aritfact ID ***********    -->
 
     <properties>
         <wiremock.version>2.20.0</wiremock.version>
@@ -37,7 +40,7 @@
             <groupId>uk.gov.gchq.palisade</groupId>
             <artifactId>user-service</artifactId>
             <version>${project.parent.version}</version>
-            <classifier>jar-with-dependencies</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

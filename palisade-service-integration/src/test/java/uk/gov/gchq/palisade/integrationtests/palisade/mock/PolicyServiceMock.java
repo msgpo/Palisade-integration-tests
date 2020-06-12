@@ -37,8 +37,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
@@ -76,10 +74,4 @@ public class PolicyServiceMock {
                 ));
     }
 
-    public static void stubHealthRule(final WireMockRule serviceMock, final ObjectMapper serializer) {
-        serviceMock.stubFor(get(urlEqualTo("/actuator/health"))
-                .willReturn(
-                        aResponse()
-                ));
-    }
 }

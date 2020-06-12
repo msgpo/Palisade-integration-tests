@@ -56,7 +56,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assume.assumeTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {PalisadeApplication.class, StreamingResourceControllerMock.class}, webEnvironment = WebEnvironment.DEFINED_PORT)
@@ -83,13 +82,9 @@ public class PalisadeComponentTest {
     @Before
     public void setUp() throws IOException {
         AuditServiceMock.stubRule(auditMock, serializer);
-        AuditServiceMock.stubHealthRule(auditMock, serializer);
         PolicyServiceMock.stubRule(policyMock, serializer);
-        PolicyServiceMock.stubHealthRule(policyMock, serializer);
         ResourceServiceMock.stubRule(resourceMock);
-        ResourceServiceMock.stubHealthRule(resourceMock, serializer);
         UserServiceMock.stubRule(userMock, serializer);
-        UserServiceMock.stubHealthRule(userMock, serializer);
         serializer.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
@@ -105,49 +100,7 @@ public class PalisadeComponentTest {
     }
 
     @Test
-    public void allServicesDown() {
-        //Given all services are down
-        auditMock.stop();
-        policyMock.stop();
-        resourceMock.stop();
-        userMock.stop();
-        //Then the Palisade Service also reports down.
-        final String downHealth = this.restTemplate.getForObject("/actuator/health", String.class);
-        assertThat(downHealth, is(equalTo("{\"status\":\"DOWN\"}")));
-
-        //When the services start one by one
-        auditMock.start();
-        //Then Palisade service still shows as down
-        final String auditDownHealth = this.restTemplate.getForObject("/actuator/health", String.class);
-        assertThat(auditDownHealth, is(equalTo("{\"status\":\"DOWN\"}")));
-
-        //When the services start one by one
-        policyMock.start();
-        //Then Palisade service still shows as down
-        final String policyDownHealth = this.restTemplate.getForObject("/actuator/health", String.class);
-        assertThat(policyDownHealth, is(equalTo("{\"status\":\"DOWN\"}")));
-
-        //When the resource service starts
-        resourceMock.start();
-        //Then Palisade service still shows as down
-        final String resourceDownHealth = this.restTemplate.getForObject("/actuator/health", String.class);
-        assertThat(resourceDownHealth, is(equalTo("{\"status\":\"DOWN\"}")));
-
-        //When the final service starts
-        userMock.start();
-        //Then Palisade service shows as up
-        final String allUpHealth = this.restTemplate.getForObject("/actuator/health", String.class);
-        assertThat(allUpHealth, is(equalTo("{\"status\":\"UP\"}")));
-    }
-
-    @Test
     public void registerDataRequestTest() {
-        // Given all other services are mocked
-        assumeTrue(auditMock.isRunning());
-        assumeTrue(policyMock.isRunning());
-        assumeTrue(resourceMock.isRunning());
-        assumeTrue(userMock.isRunning());
-
         // When
         RegisterDataRequest request = new RegisterDataRequest().userId(new UserId().id("user-id")).resourceId("resource-id").context(new Context().purpose("purpose"));
         DataRequestResponse response = restTemplate.postForObject("/registerDataRequest", request, DataRequestResponse.class);
@@ -158,11 +111,6 @@ public class PalisadeComponentTest {
 
     @Test
     public void getDataRequestConfigTest() throws InterruptedException {
-        // Given all other services are mocked
-        assumeTrue(auditMock.isRunning());
-        assumeTrue(policyMock.isRunning());
-        assumeTrue(resourceMock.isRunning());
-        assumeTrue(userMock.isRunning());
         // Given a data request has been registered
         RegisterDataRequest dataRequest = new RegisterDataRequest().userId(new UserId().id("user-id")).resourceId("resource-id").context(new Context().purpose("purpose"));
         DataRequestResponse dataResponse = restTemplate.postForObject("/registerDataRequest", dataRequest, DataRequestResponse.class);
