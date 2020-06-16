@@ -25,8 +25,6 @@ import uk.gov.gchq.palisade.service.UserConfiguration;
 import uk.gov.gchq.palisade.service.policy.config.StdPolicyConfiguration;
 import uk.gov.gchq.palisade.service.policy.config.StdResourceConfiguration;
 import uk.gov.gchq.palisade.service.policy.config.StdUserConfiguration;
-import uk.gov.gchq.palisade.service.policy.service.NullPolicyService;
-import uk.gov.gchq.palisade.service.policy.service.PolicyService;
 
 
 /**
@@ -50,10 +48,4 @@ public class PolicyTestConfiguration {
     public ResourceConfiguration resourceConfiguration() {
         return new StdResourceConfiguration();
     }
-
-    @Bean
-    public PolicyService policyService() {
-        return new NullPolicyService();
-    }
-
 }
