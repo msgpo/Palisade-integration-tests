@@ -33,10 +33,20 @@ spec:
             - node2
             - node3
   containers:
-  
-    
+  - name: jnlp
+    image: jenkins/jnlp-slave
+    imagePullPolicy: Always
+    args: 
+    - $(JENKINS_SECRET)
+    - $(JENKINS_NAME)
+    resources:
+      requests:
+        ephemeral-storage: "4Gi"
+      limits:
+        ephemeral-storage: "8Gi"
+
   - name: docker-cmds
-    image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-did:INFRA
+    image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-did:200608
     imagePullPolicy: IfNotPresent
     command:
     - sleep
@@ -44,24 +54,24 @@ spec:
     - 99d
     env:
       - name: DOCKER_HOST
-        value: host
+        value: tcp://localhost:2375
     resources:
       requests:
         ephemeral-storage: "4Gi"
       limits:
         ephemeral-storage: "8Gi"
-        
+  
   - name: hadolint
     image: hadolint/hadolint:latest-debian@sha256:15016b18964c5e623bd2677661a0be3c00ffa85ef3129b11acf814000872861e
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     command:
-    - cat
-    tty: true
+        - cat
+    tty: true  
     resources:
       requests:
-        ephemeral-storage: "4Gi"
+        ephemeral-storage: "1Gi"
       limits:
-        ephemeral-storage: "8Gi"
+        ephemeral-storage: "2Gi"
 
   - name: dind-daemon
     image: docker:1.12.6-dind
@@ -80,7 +90,21 @@ spec:
         ephemeral-storage: "1Gi"
       limits:
         ephemeral-storage: "2Gi"
-        
+
+  - name: maven
+    image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200608
+    imagePullPolicy: IfNotPresent
+    command: ['docker', 'run', '-p', '80:80', 'httpd:latest']
+    tty: true
+    volumeMounts:
+      - mountPath: /var/run
+        name: docker-sock
+    resources:
+      requests:
+        ephemeral-storage: "4Gi"
+      limits:
+        ephemeral-storage: "8Gi"
+
   volumes:
     - name: docker-graph-storage
       emptyDir: {}
