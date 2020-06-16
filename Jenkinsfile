@@ -81,6 +81,14 @@ spec:
       limits:
         ephemeral-storage: "2Gi"
         
+  volumes:
+    - name: docker-graph-storage
+      emptyDir: {}
+    - name: docker-sock
+      hostPath:
+         path: /var/run
+        
+        
 ''') {
     node(POD_LABEL) {
         def GIT_BRANCH_NAME
