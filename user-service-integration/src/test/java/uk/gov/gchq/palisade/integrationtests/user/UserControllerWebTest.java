@@ -41,7 +41,7 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("caffeine")
-@SpringBootTest(classes = UserApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = UserApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class UserControllerWebTest {
     @Autowired
     private UserController controller;
