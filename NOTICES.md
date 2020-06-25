@@ -7,7 +7,7 @@ List of third-party dependencies grouped by their license type
 * Spring Boot AutoConfigure ([org.springframework.boot:spring-boot-autoconfigure:2.2.0.RELEASE](https://projects.spring.io/spring-boot/#/spring-boot-parent/spring-boot-autoconfigure))
 * Spring Boot Test Starter ([org.springframework.boot:spring-boot-starter-test:2.2.0.RELEASE](https://projects.spring.io/spring-boot/#/spring-boot-parent/spring-boot-starters/spring-boot-starter-test))
 * Spring Cloud Starter OpenFeign ([org.springframework.cloud:spring-cloud-starter-openfeign:2.2.0.RELEASE](https://projects.spring.io/spring-cloud))
-* audit-service ([uk.gov.gchq.palisade:audit-service:0.4.0-20200624.102116-339](https://github.com/gchq/Palisade-services/tree/develop/audit-service))
+* audit-service ([uk.gov.gchq.palisade:audit-service:0.4.0-SNAPSHOT](https://github.com/gchq/Palisade-services/tree/develop/audit-service))
 * common ([uk.gov.gchq.palisade:common:0.4.0-SNAPSHOT](https://github.com/gchq/Palisade-common))
 * data-service ([uk.gov.gchq.palisade:data-service:0.4.0-SNAPSHOT](https://github.com/gchq/Palisade-services/tree/develop/data-service))
 * hr-data-generator ([uk.gov.gchq.palisade:hr-data-generator:0.4.0-SNAPSHOT](https://github.com/gchq/Palisade-examples/tree/develop/hr-data-generator))
