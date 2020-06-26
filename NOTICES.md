@@ -2,8 +2,8 @@ List of third-party dependencies grouped by their license type
 
 ### [Apache Software License 2.0](./licenses/apache_software_license_2.0.txt):
 * WireMock ([com.github.tomakehurst:wiremock-standalone:2.20.0](http://wiremock.org))
-* Apache Hadoop Common ([org.apache.hadoop:hadoop-common:3.2.0](no url defined))
-* Apache Hadoop Mini-Cluster ([org.apache.hadoop:hadoop-minicluster:3.2.0](no url defined))
+* Apache Hadoop Common ([org.apache.hadoop:hadoop-common:3.2.1](no url defined))
+* Apache Hadoop Mini-Cluster ([org.apache.hadoop:hadoop-minicluster:3.2.1](no url defined))
 * Spring Boot AutoConfigure ([org.springframework.boot:spring-boot-autoconfigure:2.2.0.RELEASE](https://projects.spring.io/spring-boot/#/spring-boot-parent/spring-boot-autoconfigure))
 * Spring Boot Test Starter ([org.springframework.boot:spring-boot-starter-test:2.2.0.RELEASE](https://projects.spring.io/spring-boot/#/spring-boot-parent/spring-boot-starters/spring-boot-starter-test))
 * Spring Cloud Starter OpenFeign ([org.springframework.cloud:spring-cloud-starter-openfeign:2.2.0.RELEASE](https://projects.spring.io/spring-cloud))
