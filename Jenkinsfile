@@ -111,8 +111,6 @@ spec:
     - name: docker-sock
       hostPath:
          path: /var/run
-        
-        
 ''') {
     node(POD_LABEL) {
         def GIT_BRANCH_NAME
@@ -211,16 +209,17 @@ spec:
                         }
                     }
                 }
-                dir ('Palisade-services') {
-                    container('docker-cmds') {
-                        sh '''
-                            java -Dspring.profiles.active=discovery -jar services-manager/target/services-manager-*-exec.jar
-                            java -Dspring.profiles.active=example-perf -jar services-manager/target/services-manager-*-exec.jar --manager.schedule=performance-create-task,palisade-task,performance-test-task
-                        '''
-                        sh 'cat *.log'
-                        sh 'pkill java'
-                    }
-                }
+                // JVM Example Performance Test
+                // dir ('Palisade-services') {
+                //     container('docker-cmds') {
+                //         sh '''
+                //             java -Dspring.profiles.active=discovery -jar services-manager/target/services-manager-*-exec.jar
+                //             java -Dspring.profiles.active=example-perf -jar services-manager/target/services-manager-*-exec.jar --manager.schedule=performance-create-task,palisade-task,performance-test-task
+                //         '''
+                //         sh 'cat *.log'
+                //         sh 'pkill java'
+                //     }
+                // }
             }
         }
     }
