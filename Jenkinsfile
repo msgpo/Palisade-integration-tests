@@ -159,15 +159,10 @@ spec:
             }
             dir('Palisade-services') {
                 git url: 'https://github.com/gchq/Palisade-services.git'
-                if (env.BRANCH_NAME.substring(0, 2) == "PR") {
-                    sh "git checkout ${GIT_BRANCH_NAME} || git checkout develop"
-                    container('docker-cmds') {
-                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
-                        }
-                    }
-                }
-                else if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0) {
+                // Checkout services if a similarly-named branch exists
+                // If this is a PR, a example smoke-test will be run, so checkout services develop if no similarly-named branch was found
+                // This will be needed to build the jars
+                if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0 || (env.BRANCH_NAME.substring(0, 2) == "PR" && sh(script: "git checkout develop", returnStatus: true) == 0)) {
                     container('docker-cmds') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                             sh 'mvn -s $MAVEN_SETTINGS install -P quick'
@@ -179,8 +174,7 @@ spec:
 
         stage('Integration Tests, Checkstyle') {
             dir('Palisade-integration-tests') {
-                git url: 'https://github.com/gchq/Palisade-integration-tests.git'
-                sh "git checkout ${GIT_BRANCH_NAME}"
+                git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-integration-tests.git'
                 container('docker-cmds') {
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                         sh 'mvn -s $MAVEN_SETTINGS install'
@@ -196,24 +190,35 @@ spec:
                 }
             }
         }
+
         stage('Run the JVM Example') {
-                // Always run some sort of smoke test if this is a Pull Request or from develop or main
-                if (env.BRANCH_NAME.substring(0, 2) == "PR" || env.BRANCH_NAME == "develop" || env.BRANCH_NAME == "main") {
-                    // If this branch name exists in examples, use that
-                    // Otherwise, default to examples/develop
-                    dir ('Palisade-examples') {
-                        git url: 'https://github.com/gchq/Palisade-examples.git'
-                        sh "git checkout ${GIT_BRANCH_NAME} || git checkout develop"
+            // Always run some sort of smoke test if this is a Pull Request or from develop or main
+            if (env.BRANCH_NAME.substring(0, 2) == "PR" || env.BRANCH_NAME == "develop" || env.BRANCH_NAME == "main") {
+                // If this branch name exists in examples, use that
+                // Otherwise, default to examples/develop
+                dir ('Palisade-examples') {
+                    git branch: 'develop', url: 'https://github.com/gchq/Palisade-examples.git'
+                    git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
                     container('docker-cmds') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
                             sh '''
-                                mvn -s $MAVEN_SETTINGS install -P quick
-
                                 bash deployment/local-jvm/bash-scripts/startServices.sh
                                 bash deployment/local-jvm/bash-scripts/runFormattedLocalJVMExample.sh | tee deployment/local-jvm/bash-scripts/exampleOutput.txt
                                 bash deployment/local-jvm/bash-scripts/verify.sh
                             '''
+                            sh 'pkill java'
                         }
+                    }
+                }
+                dir ('Palisade-services') {
+                    container('docker-cmds') {
+                        sh '''
+                            java -Dspring.profiles.active=discovery -jar services-manager/target/services-manager-*-exec.jar
+                            java -Dspring.profiles.active=example-perf -jar services-manager/target/services-manager-*-exec.jar --manager.schedule=performance-create-task,palisade-task,performance-test-task
+                        '''
+                        sh 'cat *.log'
+                        sh 'pkill java'
                     }
                 }
             }
