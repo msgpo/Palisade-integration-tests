@@ -204,8 +204,8 @@ spec:
                                 bash deployment/local-jvm/bash-scripts/startServices.sh
                                 bash deployment/local-jvm/bash-scripts/runFormattedLocalJVMExample.sh | tee deployment/local-jvm/bash-scripts/exampleOutput.txt
                                 bash deployment/local-jvm/bash-scripts/verify.sh
+                                bash deployment/local-jvm/bash-scripts/stopServices.sh
                             '''
-                            sh 'pkill java'
                         }
                     }
                 }
