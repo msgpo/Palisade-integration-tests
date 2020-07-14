@@ -227,13 +227,13 @@ spec:
                                  "--set global.repository=${ECR_REGISTRY} " +
                                  "--set global.hostname=${EGRESS_ELB} " +
                                  "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
-                                 "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE} " +
+                                 "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/data " +
                                  "--set global.persistence.kafka.aws.volumeHandle=${VOLUME_HANDLE_KAFKA} " +
                                  "--set global.persistence.redisCluster.aws.volumeHandle=${VOLUME_HANDLE_REDIS_MASTER} " +
                                  "--set global.persistence.zookeeper.aws.volumeHandle=${VOLUME_HANDLE_ZOOKEEPER} " +
                                  "--set global.redis.install=false " +
                                  "--set global.redis-cluster.install=true " +
-                                 "--namespace ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
+                                 "--namespace test", returnStatus: true) == 0) {
                                 sh '''
                                      docker images
                                      helm list
