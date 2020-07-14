@@ -163,7 +163,7 @@ spec:
                 if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0 || (env.BRANCH_NAME.substring(0, 2) == "PR" && sh(script: "git checkout develop", returnStatus: true) == 0)) {
                     container('docker-cmds') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                            sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
+                            sh 'mvn -T 4 -s $MAVEN_SETTINGS install  -Dmaven.test.skip=true'
                         }
                     }
                 }
@@ -197,7 +197,7 @@ spec:
                     git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
                     container('docker-cmds') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
+                            sh 'mvn -T 4 -s $MAVEN_SETTINGS install -P quick'
                             sh '''
                                 bash deployment/local-jvm/bash-scripts/startServices.sh
                                 bash deployment/local-jvm/bash-scripts/runFormattedLocalJVMExample.sh | tee deployment/local-jvm/bash-scripts/exampleOutput.txt
@@ -225,7 +225,7 @@ spec:
                                 sh '''
                                      docker images
                                      kubectl get pods --namespace test
-                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}')
+                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}') --namespace test
                                      bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
                                      bash deployment/local-k8s/local-bash-scripts/verify.sh
                                  '''
