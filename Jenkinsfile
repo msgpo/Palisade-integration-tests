@@ -217,8 +217,6 @@ spec:
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                         def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(10)
                         sh 'palisade-login'
-                        if (sh(script: "ls && pwd", returnStatus: true) == 0) {
-                        }
                         if (sh(script: "namespace-create ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
                             sh 'echo namespace create succeeded'
                             sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
@@ -231,7 +229,7 @@ spec:
                                    --set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} \
                                    --set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data \
                                    --timeout=200s \
-                                   --namespace ${GIT_BRANCH_NAME_LOWER}
+                                   --namespace pal-544-ad
                              '''
                             sleep(time: 30, unit: 'SECONDS')
                             sh '''
