@@ -243,8 +243,10 @@ spec:
                                  '''
                              } else {
                                 sh '''
+                                    docker images
                                     helm list
                                     kubectl get pods --all-namespaces
+                                    kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}') --namespace test
                                 '''
                              }
 
