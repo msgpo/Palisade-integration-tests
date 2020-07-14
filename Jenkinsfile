@@ -224,11 +224,17 @@ spec:
                             sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
                             //create the branch namespace
                             if (sh(script: "helm upgrade --install palisade . " +
+                                    "--set global.persistence.dataStores.palisade-data-store.local.hostPath=$(pwd)/resources/data " +
+                                    "--set global.persistence.classpathJars.local.hostPath=$(pwd)/deployment/target " +
                                     "--namespace ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
                                 echo("successfully deployed")
                             } else {
                                 error("Build failed because of failed maven deploy")
                             }
+                            sh '''
+                                bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
+                                bash deployment/local-k8s/local-bash-scripts/verify.sh
+                            '''
                         } else {
                             error("Could not create namespace")
                         }
