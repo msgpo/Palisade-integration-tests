@@ -221,6 +221,7 @@ spec:
                         if (sh(script: "namespace-create test", returnStatus: true) == 0) {
                             sh 'echo namespace create succeeded'
                             sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
+                            sh 'helm dep up'
                             //create the branch namespace
                              if (sh(script: "helm upgrade --install palisade . " +
                                  "--set global.hosting=aws  " +
