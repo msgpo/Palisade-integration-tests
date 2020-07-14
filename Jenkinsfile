@@ -226,6 +226,7 @@ spec:
                              if (sh(script: "ls && pwd", returnStatus: true) == 0) {
                                 sh '''
                                      bash deployment/local-k8s/local-bash-scripts/deployServicesToK8s.sh
+                                     kubectl get pods --all-namespaces
                                      bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
                                      bash deployment/local-k8s/local-bash-scripts/verify.sh
                                  '''
