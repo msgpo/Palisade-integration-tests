@@ -163,7 +163,7 @@ spec:
                 if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0 || (env.BRANCH_NAME.substring(0, 2) == "PR" && sh(script: "git checkout develop", returnStatus: true) == 0)) {
                     container('docker-cmds') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                            sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true -T 1.5C'
+                            sh 'mvn -s $MAVEN_SETTINGS install -P quick -T 1.5C'
                         }
                     }
                 }
@@ -217,6 +217,7 @@ spec:
                 git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
                 container('maven') {
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                        echo '$MAVEN_SETTINGS'
                         if (sh(script: "namespace-create test", returnStatus: true) == 0) {
                             sh 'echo namespace create succeeded'
                             sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
@@ -227,7 +228,7 @@ spec:
                                  "--set global.repository=${ECR_REGISTRY} " +
                                  "--set global.hostname=${EGRESS_ELB} " +
                                  "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
-                                 "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/data " +
+                                 "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE} " +
                                  "--set global.persistence.kafka.aws.volumeHandle=${VOLUME_HANDLE_KAFKA} " +
                                  "--set global.persistence.redisCluster.aws.volumeHandle=${VOLUME_HANDLE_REDIS_MASTER} " +
                                  "--set global.persistence.zookeeper.aws.volumeHandle=${VOLUME_HANDLE_ZOOKEEPER} " +
