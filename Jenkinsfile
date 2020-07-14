@@ -211,5 +211,27 @@ spec:
                 }
             }
         }
+        stage('Run the K8s Example') {
+            // If this branch name exists in examples, use that
+            // Otherwise, default to examples/develop
+            dir ('Palisade-examples') {
+                git branch: 'develop', url: 'https://github.com/gchq/Palisade-examples.git'
+                git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
+                container('docker-cmds') {
+                    configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                        sh 'mvn -s $MAVEN_SETTINGS install -P quick'
+                        sh '''
+                            helm version
+                            bash deployment/local-k8s/local-bash-scripts/deployServicesToK8s.sh
+                            helm list
+                            kubectl get pods
+                            bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
+                            helm uninstall palisade
+                            bash deployment/local-k8s/local-bash-scripts/verify.sh
+                        '''
+                    }
+                }
+            }
+        }
     }
 }
