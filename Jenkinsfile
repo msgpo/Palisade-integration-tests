@@ -224,7 +224,8 @@ spec:
                              if (sh(script: "bash deployment/local-k8s/local-bash-scripts/deployServicesToK8s.sh", returnStatus: true) == 0) {
                                 sh '''
                                      docker images
-                                     kubectl get pods --namespace test
+                                     helm list
+                                     kubectl get pods --all-namespaces
                                      kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}') --namespace test
                                      bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
                                      bash deployment/local-k8s/local-bash-scripts/verify.sh
