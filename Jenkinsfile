@@ -223,40 +223,25 @@ spec:
                             sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
                             sh 'helm dep up'
                             //create the branch namespace
-                             if (sh(script: "helm upgrade --install palisade . " +
+                             sh 'helm upgrade --install palisade . " +
                                  "--set global.hosting=aws  " +
                                  "--set global.repository=${ECR_REGISTRY} " +
                                  "--set global.hostname=${EGRESS_ELB} " +
                                  "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
                                  "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data " +
-                                 "--namespace test", returnStatus: true) == 0) {
-                                sh '''
-                                     docker images
-                                     helm list
-                                     kubectl get pods --all-namespaces
-                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}') --namespace test
-                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/example-model/ {print $1}') --namespace test
-                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/palisade-service/ {print $1}') --namespace test
-                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/user-service/ {print $1}') --namespace test
-                                     bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
-                                     bash deployment/local-k8s/local-bash-scripts/verify.sh
-                                     helm uninstall palisade -n test
-                                 '''
-                             } else {
-                                sh '''
-                                     docker images
-                                     helm list
-                                     kubectl get pods --all-namespaces
-                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}') --namespace test
-                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/example-model/ {print $1}') --namespace test
-                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/palisade-service/ {print $1}') --namespace test
-                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/user-service/ {print $1}') --namespace test
-                                     bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
-                                     bash deployment/local-k8s/local-bash-scripts/verify.sh
-                                     helm uninstall palisade -n test
-                                '''
-                             }
-
+                                 "--namespace test'
+                            sh '''
+                                 docker images
+                                 helm list
+                                 kubectl get pods --all-namespaces
+                                 kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}') --namespace test
+                                 kubectl describe pod $(kubectl get pods --namespace test | awk '/example-model/ {print $1}') --namespace test
+                                 kubectl describe pod $(kubectl get pods --namespace test | awk '/palisade-service/ {print $1}') --namespace test
+                                 kubectl describe pod $(kubectl get pods --namespace test | awk '/user-service/ {print $1}') --namespace test
+                                 bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
+                                 bash deployment/local-k8s/local-bash-scripts/verify.sh
+                                 helm uninstall palisade -n test
+                             '''
                         } else {
                             error("Could not create namespace")
                         }
