@@ -222,14 +222,16 @@ spec:
                             sh 'echo namespace create succeeded'
                             sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
                             sh 'helm dep up'
-                            //create the branch namespace
-                             sh 'helm upgrade --install palisade . " +
-                                 "--set global.hosting=aws  " +
-                                 "--set global.repository=${ECR_REGISTRY} " +
-                                 "--set global.hostname=${EGRESS_ELB} " +
-                                 "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
-                                 "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data " +
-                                 "--namespace test'
+                            sh '''
+                                 helm upgrade --install palisade . \
+                                   --set global.hosting=aws \
+                                   --set global.repository=${ECR_REGISTRY} \
+                                   --set global.hostname=${EGRESS_ELB} \
+                                   --set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} \
+                                   --set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data \
+                                   --timeout=200s \
+                                   --namespace test
+                             '''
                             sh '''
                                  docker images
                                  helm list
