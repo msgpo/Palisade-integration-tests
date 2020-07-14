@@ -220,15 +220,19 @@ spec:
                 container('maven') {
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                         if (sh(script: "namespace-create test", returnStatus: true) == 0) {
-                        sh 'mvn -s $MAVEN_SETTINGS install -P quick'
+                            sh 'echo namespace create succeeded'
+                            sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
+                            //create the branch namespace
                             if (sh(script: "helm upgrade --install palisade . " +
                                     "--set global.persistence.dataStores.palisade-data-store.local.hostPath=$(pwd)/resources/data  " +
                                     "--set global.persistence.classpathJars.local.hostPath=$(pwd)/deployment/target " +
                                     "--namespace test", returnStatus: true) == 0) {
                                 echo("successfully deployed")
                             } else {
-                                error("Build failed because of failed maven deploy")
+                                error("Build failed due to helm install")
                             }
+                        } else {
+                            error("Could not create namespace -- test")
                         }
                     }
                 }
