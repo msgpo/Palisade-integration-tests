@@ -221,6 +221,13 @@ spec:
                         if (sh(script: "namespace-create test", returnStatus: true) == 0) {
                             sh 'echo namespace create succeeded'
                             sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
+                            sh '''
+                                helm delete palisade
+                                kubectl delete jobs --all
+                                kubectl delete pods --all
+                                kubectl delete pvc --all
+                                kubectl delete pv --all
+                               '''
                             sh 'kubectl get pvc -n test'
                             sh 'kubectl get jobs'
                             /* sh 'kubectl delete pvc -n test palisade-classpath-jars-example'
