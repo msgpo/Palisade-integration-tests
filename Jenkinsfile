@@ -222,7 +222,6 @@ spec:
                             sh 'echo namespace create succeeded'
                             sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
                             sh '''
-                                helm delete palisade
                                 kubectl delete --all jobs --namespace=test
                                 kubectl delete --all pods --namespace=test
                                 kubectl delete --all pvc --namespace=test
