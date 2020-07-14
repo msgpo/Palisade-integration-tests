@@ -92,7 +92,7 @@ spec:
         ephemeral-storage: "2Gi"
 
   - name: maven
-    image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200710
+    image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200608
     imagePullPolicy: IfNotPresent
     command: ['docker', 'run', '-p', '80:80', 'httpd:latest']
     tty: true
@@ -210,15 +210,14 @@ spec:
             }
         }
         stage('Run the K8s Example') {
-            // If this branch name exists in examples, use that
-            // Otherwise, default to examples/develop
             dir ('Palisade-examples') {
                 git branch: 'develop', url: 'https://github.com/gchq/Palisade-examples.git'
                 git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
                 container('maven') {
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                        echo '$MAVEN_SETTINGS'
-                        if (sh(script: "namespace-create test", returnStatus: true) == 0) {
+                        def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(10)
+                        sh 'palisade-login'
+                        if (sh(script: "namespace-create ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
                             sh 'echo namespace create succeeded'
                             sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
                             sh 'helm dep up'
@@ -230,19 +229,19 @@ spec:
                                    --set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} \
                                    --set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data \
                                    --timeout=200s \
-                                   --namespace test
+                                   --namespace ${GIT_BRANCH_NAME_LOWER}
                              '''
+                            sleep(time: 30, unit: 'SECONDS')
                             sh '''
-                                 docker images
                                  helm list
-                                 kubectl get pods --all-namespaces
-                                 kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}') --namespace test
-                                 kubectl describe pod $(kubectl get pods --namespace test | awk '/example-model/ {print $1}') --namespace test
-                                 kubectl describe pod $(kubectl get pods --namespace test | awk '/palisade-service/ {print $1}') --namespace test
-                                 kubectl describe pod $(kubectl get pods --namespace test | awk '/user-service/ {print $1}') --namespace test
+                                 kubectl get pods --namespace test
+                                 kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/audit-service/ {print $1}') --namespace pal-544-ad
+                                 kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/example-model/ {print $1}') --namespace pal-544-ad
+                                 kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/palisade-service/ {print $1}') --namespace pal-544-ad
+                                 kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/user-service/ {print $1}') --namespace pal-544-ad
                                  bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
                                  bash deployment/local-k8s/local-bash-scripts/verify.sh
-                                 helm uninstall palisade -n test
+                                 helm uninstall palisade -n pal-544-ad
                              '''
                         } else {
                             error("Could not create namespace")
