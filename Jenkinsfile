@@ -234,7 +234,7 @@ spec:
                             sleep(time: 30, unit: 'SECONDS')
                             sh '''
                                  helm list
-                                 kubectl get pods --namespace test
+                                 kubectl get pods --namespace pal-544-ad
                                  kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/audit-service/ {print $1}') --namespace pal-544-ad
                                  kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/example-model/ {print $1}') --namespace pal-544-ad
                                  kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/palisade-service/ {print $1}') --namespace pal-544-ad
