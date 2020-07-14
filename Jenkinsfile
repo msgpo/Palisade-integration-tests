@@ -219,25 +219,16 @@ spec:
                 git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
                 container('maven') {
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                        sh 'mvn -s $MAVEN_SETTINGS install -P quick'
                         if (sh(script: "namespace-create test", returnStatus: true) == 0) {
+                        sh 'mvn -s $MAVEN_SETTINGS install -P quick'
                             if (sh(script: "helm upgrade --install palisade . " +
                                     "--set global.persistence.dataStores.palisade-data-store.local.hostPath=$(pwd)/resources/data  " +
                                     "--set global.persistence.classpathJars.local.hostPath=$(pwd)/deployment/target " +
                                     "--namespace test", returnStatus: true) == 0) {
                                 echo("successfully deployed")
-                                sh '''
-                                    helm version
-                                    helm list
-                                    kubectl get pods
-                                    bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
-                                    helm uninstall palisade
-                                    bash deployment/local-k8s/local-bash-scripts/verify.sh
-                                '''
                             } else {
                                 error("Build failed because of failed maven deploy")
                             }
-
                         }
                     }
                 }
