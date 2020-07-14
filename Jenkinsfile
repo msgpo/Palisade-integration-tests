@@ -235,15 +235,25 @@ spec:
                                      helm list
                                      kubectl get pods --all-namespaces
                                      kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}') --namespace test
+                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/example-model/ {print $1}') --namespace test
+                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/palisade-service/ {print $1}') --namespace test
+                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/user-service/ {print $1}') --namespace test
                                      bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
                                      bash deployment/local-k8s/local-bash-scripts/verify.sh
+                                     helm uninstall palisade -n test
                                  '''
                              } else {
                                 sh '''
-                                    docker images
-                                    helm list
-                                    kubectl get pods --all-namespaces
-                                    kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}') --namespace test
+                                     docker images
+                                     helm list
+                                     kubectl get pods --all-namespaces
+                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/audit-service/ {print $1}') --namespace test
+                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/example-model/ {print $1}') --namespace test
+                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/palisade-service/ {print $1}') --namespace test
+                                     kubectl describe pod $(kubectl get pods --namespace test | awk '/user-service/ {print $1}') --namespace test
+                                     bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
+                                     bash deployment/local-k8s/local-bash-scripts/verify.sh
+                                     helm uninstall palisade -n test
                                 '''
                              }
 
