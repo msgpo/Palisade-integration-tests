@@ -224,16 +224,10 @@ spec:
                             //create the branch namespace
                              if (sh(script: "helm upgrade --install palisade . " +
                                  "--set global.hosting=aws  " +
-                                 "--set traefik.install=false,dashboard.install=false " +
                                  "--set global.repository=${ECR_REGISTRY} " +
                                  "--set global.hostname=${EGRESS_ELB} " +
                                  "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
-                                 "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE} " +
-                                 "--set global.persistence.kafka.aws.volumeHandle=${VOLUME_HANDLE_KAFKA} " +
-                                 "--set global.persistence.redisCluster.aws.volumeHandle=${VOLUME_HANDLE_REDIS_MASTER} " +
-                                 "--set global.persistence.zookeeper.aws.volumeHandle=${VOLUME_HANDLE_ZOOKEEPER} " +
-                                 "--set global.redis.install=false " +
-                                 "--set global.redis-cluster.install=true " +
+                                 "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data " +
                                  "--namespace test", returnStatus: true) == 0) {
                                 sh '''
                                      docker images
