@@ -219,7 +219,7 @@ spec:
                         sh 'palisade-login'
                         if (sh(script: "namespace-create ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
                             sh 'echo namespace create succeeded'
-                            sh 'mvn -s $MAVEN_SETTINGS deploy -Dmaven.test.skip=true'
+                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
                             sh 'helm dep up'
                             if (sh(script: "helm upgrade --install palisade . " +
                                     "--set global.hosting=aws  " +
@@ -245,7 +245,12 @@ spec:
                              kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/user-service/ {print $1}') --namespace pal-544-ad
                              bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
                              bash deployment/local-k8s/local-bash-scripts/verify.sh
+
+
                              helm uninstall palisade -n pal-544-ad
+                             kubectl delete pods --all --namespace=pal-544-ad
+                             kubectl delete jobs --all --namespace=pal-544-ad
+                             kubectl delete namespaces pal-544-ad
                          '''
                     }
                 }
