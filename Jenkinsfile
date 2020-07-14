@@ -232,13 +232,16 @@ spec:
                                     "--namespace ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
                                 echo("successfully deployed")
                             } else {
-                                error("Build failed because of failed maven deploy")
+                                echo("Build failed because of failed maven deploy")
                             }
                         }
                         sleep(time: 30, unit: 'SECONDS')
                         sh '''
                              helm list
                              kubectl get pods --namespace pal-544-ad
+                             kubectl get pv -namespace pal-544-ad
+                             kubectl get pvc -namespace pal-544-ad
+                             kubectl get jobs -namespace pal-544-ad
                              kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/audit-service/ {print $1}') --namespace pal-544-ad
                              kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/example-model/ {print $1}') --namespace pal-544-ad
                              kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/palisade-service/ {print $1}') --namespace pal-544-ad
