@@ -219,33 +219,34 @@ spec:
                         sh 'palisade-login'
                         if (sh(script: "namespace-create ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
                             sh 'echo namespace create succeeded'
-                            sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
+                            sh 'mvn -s $MAVEN_SETTINGS deploy -Dmaven.test.skip=true'
                             sh 'helm dep up'
-                            sh '''
-                                 helm upgrade --install palisade . \
-                                   --set global.hosting=aws \
-                                   --set global.repository=${ECR_REGISTRY} \
-                                   --set global.hostname=${EGRESS_ELB} \
-                                   --set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} \
-                                   --set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data \
-                                   --timeout=200s \
-                                   --namespace pal-544-ad
-                             '''
-                            sleep(time: 30, unit: 'SECONDS')
-                            sh '''
-                                 helm list
-                                 kubectl get pods --namespace pal-544-ad
-                                 kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/audit-service/ {print $1}') --namespace pal-544-ad
-                                 kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/example-model/ {print $1}') --namespace pal-544-ad
-                                 kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/palisade-service/ {print $1}') --namespace pal-544-ad
-                                 kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/user-service/ {print $1}') --namespace pal-544-ad
-                                 bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
-                                 bash deployment/local-k8s/local-bash-scripts/verify.sh
-                                 helm uninstall palisade -n pal-544-ad
-                             '''
-                        } else {
-                            error("Could not create namespace")
+                            if (sh(script: "helm upgrade --install palisade . " +
+                                    "--set global.hosting=aws  " +
+                                    "--set traefik.install=true,dashboard.install=true " +
+                                    "--set global.repository=${ECR_REGISTRY} " +
+                                    "--set global.hostname=${EGRESS_ELB} " +
+                                    "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
+                                    "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data " +
+                                    "--timeout=200s " +
+                                    "--namespace ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
+                                echo("successfully deployed")
+                            } else {
+                                error("Build failed because of failed maven deploy")
+                            }
                         }
+                        sleep(time: 30, unit: 'SECONDS')
+                        sh '''
+                             helm list
+                             kubectl get pods --namespace pal-544-ad
+                             kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/audit-service/ {print $1}') --namespace pal-544-ad
+                             kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/example-model/ {print $1}') --namespace pal-544-ad
+                             kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/palisade-service/ {print $1}') --namespace pal-544-ad
+                             kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/user-service/ {print $1}') --namespace pal-544-ad
+                             bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
+                             bash deployment/local-k8s/local-bash-scripts/verify.sh
+                             helm uninstall palisade -n pal-544-ad
+                         '''
                     }
                 }
             }
