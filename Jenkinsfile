@@ -223,15 +223,12 @@ spec:
                             sh 'mvn -s $MAVEN_SETTINGS install -Dmaven.test.skip=true'
                             sh '''
                                 helm delete palisade
-                                kubectl delete jobs --all
-                                kubectl delete pods --all
-                                kubectl delete pvc --all
-                                kubectl delete pv --all
+                                kubectl delete --all jobs --namespace=test
+                                kubectl delete --all pods --namespace=test
+                                kubectl delete --all pvc --namespace=test
+                                kubectl delete --all pv --namespace=test
+                                kubectl delete --all deployments --namespace=test
                                '''
-                            sh 'kubectl get pvc -n test'
-                            sh 'kubectl get jobs'
-                            /* sh 'kubectl delete pvc -n test palisade-classpath-jars-example'
-                            sh 'kubectl delete pvc -n test palisade-data-store' */
                             sh 'helm dep up'
                             //create the branch namespace
                              if (sh(script: "helm upgrade --install palisade . " +
