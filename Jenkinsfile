@@ -242,13 +242,6 @@ spec:
                              kubectl get pv --all-namespaces
                              kubectl get pvc --all-namespaces
                              kubectl get jobs --all-namespaces
-                             kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/audit-service/ {print $1}') --namespace pal-544-ad
-                             kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/example-model/ {print $1}') --namespace pal-544-ad
-                             kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/palisade-service/ {print $1}') --namespace pal-544-ad
-                             kubectl describe pod $(kubectl get pods --namespace pal-544-ad | awk '/user-service/ {print $1}') --namespace pal-544-ad
-                             bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh
-                             bash deployment/local-k8s/local-bash-scripts/verify.sh
-
 
                              helm uninstall palisade -n pal-544-ad
                              kubectl delete pods --all -n pal-544-ad
