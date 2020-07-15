@@ -236,18 +236,18 @@ spec:
                             }
                         }
                         sleep(time: 30, unit: 'SECONDS')
+                        sh "helm list"
+                        sh "kubectl get pv -n ${GIT_BRANCH_NAME_LOWER}"
                         sh '''
-                             helm list
-                             kubectl get pods --all-namespaces
-                             kubectl get pv --all-namespaces
-                             kubectl get pvc --all-namespaces
-                             kubectl get jobs --all-namespaces
+                            kubectl get pods --all-namespaces
+                            kubectl get pvc --all-namespaces
+                            kubectl get jobs --all-namespaces
 
-                             helm uninstall palisade -n pal-544-ad
-                             kubectl delete pods --all -n pal-544-ad
-                             kubectl delete jobs --all -n pal-544-ad
-                             kubectl delete namespaces pal-544-ad
-                         '''
+                            helm uninstall palisade -n pal-544-ad
+                            kubectl delete pods --all -n pal-544-ad
+                            kubectl delete jobs --all -n pal-544-ad
+                            kubectl delete namespaces pal-544-ad
+                        '''
                     }
                 }
             }
