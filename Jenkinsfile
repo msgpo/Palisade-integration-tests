@@ -222,7 +222,7 @@ spec:
                             sh 'echo namespace create succeeded'
                             sh 'mvn -s $MAVEN_SETTINGS install -P quick'
                             sh 'helm dep up'
-                            if (sh(script: "helm install palisade . " +
+                            if (sh(script: "helm upgrade --install palisade . " +
                                     "--set global.hosting=aws  " +
                                     "--set traefik.install=true,dashboard.install=true " +
                                     "--set global.repository=${ECR_REGISTRY} " +
