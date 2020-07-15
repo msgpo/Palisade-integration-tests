@@ -237,20 +237,7 @@ spec:
                             }
                         }
                         sleep(time: 30, unit: 'SECONDS')
-                        sh '''
-                            helm list
-
-                            "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
-                            "kubectl get pv -n ${GIT_BRANCH_NAME_LOWER}"
-                            "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER}"
-                            "kubectl get jobs -n ${GIT_BRANCH_NAME_LOWER}"
-
-                            "helm uninstall palisade -n ${GIT_BRANCH_NAME_LOWER}"
-
-                            "kubectl delete pods -n ${GIT_BRANCH_NAME_LOWER}" --all
-                            "kubectl delete jobs -n ${GIT_BRANCH_NAME_LOWER}" --all
-                            "kubectl delete namespaces ${GIT_BRANCH_NAME_LOWER}"
-                        '''
+                        sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh ${GIT_BRANCH_NAME_LOWER}"
                     }
                 }
             }
