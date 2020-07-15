@@ -243,8 +243,9 @@ spec:
                              kubectl get pvc --all-namespaces
                              kubectl get jobs --all-namespaces
 
-                             kubectl describe pvc palisade-data-store -n pal-544-ad
-                             
+                             kubectl delete pv palisade-data-store-pal-544-ad -n pal-544-ad
+                             kubectl delete pv palisade-classpath-jars-example-pal-544-ad -n pal-544-ad
+
                              helm uninstall palisade -n pal-544-ad
                              kubectl delete pods --all -n pal-544-ad
                              kubectl delete jobs --all -n pal-544-ad
