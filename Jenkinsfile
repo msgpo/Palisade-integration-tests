@@ -237,17 +237,15 @@ spec:
                             }
                         }
                         sleep(time: 30, unit: 'SECONDS')
-                        sh '''
-                            "helm list"
-                            "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
-                            "kubectl get pv -n ${GIT_BRANCH_NAME_LOWER}"
-                            "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER}"
-                            "kubectl get jobs -n ${GIT_BRANCH_NAME_LOWER}"
-                            "helm uninstall palisade -n pal-544-ad"
-                            "kubectl delete pods --all -n pal-544-ad"
-                            "kubectl delete jobs --all -n pal-544-ad"
-                            "kubectl delete namespaces pal-544-ad"
-                        '''
+                        sh 'helm list'
+                        sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                        sh "kubectl get pv -n ${GIT_BRANCH_NAME_LOWER}"
+                        sh "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER}"
+                        sh "kubectl get jobs -n ${GIT_BRANCH_NAME_LOWER}"
+                        sh "helm uninstall palisade -n pal-544-ad"
+                        sh "kubectl delete pods -n ${GIT_BRANCH_NAME_LOWER} --all"
+                        sh "kubectl delete jobs -n ${GIT_BRANCH_NAME_LOWER} --all"
+                        sh "kubectl delete namespaces ${GIT_BRANCH_NAME_LOWER}"
                     }
                 }
             }
