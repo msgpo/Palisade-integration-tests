@@ -124,6 +124,12 @@ spec:
             }
             echo sh(script: 'env | sort', returnStdout: true)
         }
+        stage('Helm') {
+            container('maven') {
+                sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh ${GIT_BRANCH_NAME_LOWER}"
+            }
+        }
+
 
         stage('Prerequisites') {
             dir('Palisade-common') {
