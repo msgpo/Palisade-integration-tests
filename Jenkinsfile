@@ -131,11 +131,6 @@ spec:
                     container('maven') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                         sh '''
-                        helm list
-                        kubectl get pods --all-namespaces
-                        kubectl get pv --all-namespaces
-                        kubectl get pvc --all-namespaces
-                        kubectl get jobs --all-namespaces
                         bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh pal-455-ad
                         '''
                     }
