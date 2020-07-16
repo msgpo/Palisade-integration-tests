@@ -226,7 +226,7 @@ spec:
                                  "--set global.hostname=${EGRESS_ELB} " +
                                  "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
                                  "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data " +
-                                 "--namespace test", returnStatus: true) == 0) {
+                                 "--namespace ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
                                  echo("successfully deployed")
                             } else {
                                echo("Build failed because of failed helm install")
