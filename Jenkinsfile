@@ -222,18 +222,23 @@ spec:
                             sh 'mvn -s $MAVEN_SETTINGS install -P quick'
                             sh 'helm dep up'
                             if (sh(script: "helm upgrade --install palisade . " +
-                                    "--set global.hosting=aws  " +
-                                    "--set traefik.install=true,dashboard.install=true " +
-                                    "--set global.repository=${ECR_REGISTRY} " +
-                                    "--set global.hostname=${EGRESS_ELB} " +
-                                    "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
-                                    "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data " +
-                                    "--timeout=200s " +
-                                    "--namespace ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
-                                echo("successfully deployed")
+                                     "--set global.hosting=aws  " +
+                                     "--set traefik.install=false,dashboard.install=false " +
+                                     "--set global.repository=${ECR_REGISTRY} " +
+                                     "--set global.hostname=${EGRESS_ELB} " +
+                                     "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS}/deployment/target " +
+                                     "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data " +
+                                     "--set global.persistence.kafka.aws.volumeHandle=${VOLUME_HANDLE_KAFKA} " +
+                                     "--set global.persistence.redisCluster.aws.volumeHandle=${VOLUME_HANDLE_REDIS_MASTER} " +
+                                     "--set global.persistence.zookeeper.aws.volumeHandle=${VOLUME_HANDLE_ZOOKEEPER} " +
+                                     "--set global.redis.install=false " +
+                                     "--set global.redis-cluster.install=true " +
+                                     "--namespace ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
+                                 echo("successfully deployed")
                             } else {
-                                echo("Build failed because of failed helm install")
+                               echo("Build failed because of failed helm install")
                             }
+
                         }
                         sleep(time: 30, unit: 'SECONDS')
                         sh 'bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh'
