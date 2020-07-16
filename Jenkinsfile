@@ -124,6 +124,23 @@ spec:
             }
             echo sh(script: 'env | sort', returnStdout: true)
         }
+        stage('Helm') {
+            dir ('Palisade-examples') {
+             git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
+                container('maven') {
+                sh '''
+                helm list
+                kubectl get pods --all-namespaces
+                kubectl get pv --all-namespaces
+                kubectl get pvc --all-namespaces
+                kubectl get jobs --all-namespaces
+                bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh pal-455-ad
+                '''
+                }
+            }
+        }
+
+
         stage('Prerequisites') {
             dir('Palisade-common') {
                 git url: 'https://github.com/gchq/Palisade-common.git'
@@ -231,9 +248,19 @@ spec:
                             } else {
                                echo("Build failed because of failed helm install")
                             }
+                            sleep(time: 60, unit: 'SECONDS')
+                            sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                            sleep(time: 60, unit: 'SECONDS')
+                            sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                            sleep(time: 60, unit: 'SECONDS')
+                            sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                            sleep(time: 60, unit: 'SECONDS')
+                            sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                            sh 'bash deployment/local-k8s/k8s-bash-scripts/runFormattedK8sExample'
+                            sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh ${GIT_BRANCH_NAME_LOWER}"
                         }
-                        sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
-                        sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh ${GIT_BRANCH_NAME_LOWER}"
+
+
                     }
                 }
             }
