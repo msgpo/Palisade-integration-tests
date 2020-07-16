@@ -254,7 +254,7 @@ spec:
                             sh "kubectl get events"
                             sleep(time: 60, unit: 'SECONDS')
                             sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
-                            sh "kubectl describe $(kubectl get pods ${GIT_BRANCH_NAME_LOWER} | awk '/palisade-service/ {print $1}')"
+                            sh "kubectl describe palisade-service-*"
                             sleep(time: 60, unit: 'SECONDS')
                             sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
                             sh 'bash deployment/local-k8s/k8s-bash-scripts/runFormattedK8sExample.sh'
