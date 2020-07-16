@@ -124,6 +124,23 @@ spec:
             }
             echo sh(script: 'env | sort', returnStdout: true)
         }
+        stage('Helm') {
+            container('maven') {
+            sh '''
+            helm list
+            kubectl get pods --all-namespaces
+            kubectl get pv --all-namespaces
+            kubectl get pvc --all-namespaces
+            kubectl get jobs --all-namespaces
+            kubectl delete pods -n pal-455-ad --all
+            kubectl delete jobs -n pal-455-ad --all
+            kubectl delete pv palisade-classpath-jars-example-pal-544-ad
+            kubectl delete pv palisade-data-store-pal-544-ad
+            '''
+            }
+        }
+
+
         stage('Prerequisites') {
             dir('Palisade-common') {
                 git url: 'https://github.com/gchq/Palisade-common.git'
@@ -225,17 +242,14 @@ spec:
                                  "--set global.hostname=${EGRESS_ELB} " +
                                  "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
                                  "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data " +
+                                 "--set traefik.install=true " +
                                  "--namespace ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
                                  echo("successfully deployed")
                             } else {
                                echo("Build failed because of failed helm install")
                             }
                         }
-                        sleep(time: 150, unit: 'SECONDS')
                         sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
-                         if (sh(script: "bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh", returnStatus: true) == 0) {
-
-                         }
                         sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh ${GIT_BRANCH_NAME_LOWER}"
                     }
                 }
