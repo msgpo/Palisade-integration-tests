@@ -247,16 +247,14 @@ spec:
                             } else {
                                echo("Build failed because of failed helm install")
                             }
-                            sleep(time: 60, unit: 'SECONDS')
                             sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
-                            sleep(time: 60, unit: 'SECONDS')
-                            sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
-                            sh "kubectl get events"
-                            sleep(time: 60, unit: 'SECONDS')
-                            sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
-                            sh "kubectl describe pods palisade-service-*"
                             sh "bash deployment/local-k8s/k8s-bash-scripts/getLogs.sh ${GIT_BRANCH_NAME_LOWER} palisade-service"
-                            sleep(time: 60, unit: 'SECONDS')
+                            sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                            sh "bash deployment/local-k8s/k8s-bash-scripts/getLogs.sh ${GIT_BRANCH_NAME_LOWER} palisade-service"
+                            sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                            sh "bash deployment/local-k8s/k8s-bash-scripts/getLogs.sh ${GIT_BRANCH_NAME_LOWER} palisade-service"
+                            sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                            sh "bash deployment/local-k8s/k8s-bash-scripts/getLogs.sh ${GIT_BRANCH_NAME_LOWER} palisade-service"
                             sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
                             sh 'bash deployment/local-k8s/k8s-bash-scripts/runFormattedK8sExample.sh'
                             sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh ${GIT_BRANCH_NAME_LOWER}"
