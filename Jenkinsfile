@@ -132,6 +132,8 @@ spec:
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                         sh '''
                         docker images
+                        docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+                        docker images
                         bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh pal-455-ad
                         '''
                     }
@@ -238,7 +240,6 @@ spec:
                             sh 'helm dep up'
                             if (sh(script: "helm upgrade --install palisade . " +
                                  "--set global.hosting=aws  " +
-                                 "--set traefik.install=true,dashboard.install=true " +
                                  "--set global.repository=${ECR_REGISTRY} " +
                                  "--set global.hostname=${EGRESS_ELB} " +
                                  "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
@@ -249,9 +250,9 @@ spec:
                                echo("Build failed because of failed helm install")
                             }
                             sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
-                            sleep(time: 10, unit: 'SECONDS')
+                            sleep(time: 60, unit: 'SECONDS')
                             sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
-                            sleep(time: 20, unit: 'SECONDS')
+                            sleep(time: 60, unit: 'SECONDS')
                             sh "bash deployment/local-k8s/k8s-bash-scripts/getLogs.sh ${GIT_BRANCH_NAME_LOWER} palisade-service"
                             sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
                             sh "bash deployment/local-k8s/k8s-bash-scripts/getLogs.sh ${GIT_BRANCH_NAME_LOWER} palisade-service"
