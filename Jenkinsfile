@@ -124,23 +124,6 @@ spec:
             }
             echo sh(script: 'env | sort', returnStdout: true)
         }
-        stage('Helm') {
-            container('maven') {
-            sh '''
-            helm list
-            kubectl get pods --all-namespaces
-            kubectl get pv --all-namespaces
-            kubectl get pvc --all-namespaces
-            kubectl get jobs --all-namespaces
-            kubectl delete pods -n pal-455-ad --all
-            kubectl delete jobs -n pal-455-ad --all
-            kubectl delete pv palisade-classpath-jars-example-pal-544-ad
-            kubectl delete pv palisade-data-store-pal-544-ad
-            '''
-            }
-        }
-
-
         stage('Prerequisites') {
             dir('Palisade-common') {
                 git url: 'https://github.com/gchq/Palisade-common.git'
