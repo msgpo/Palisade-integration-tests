@@ -132,6 +132,8 @@ spec:
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                         sh '''
                         bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh pal-455-ad
+                        kubectl delete pv palisade-classpath-jars-example-pal-544-ad
+                        kubectl delete pv palisade-data-store-pal-544-ad
                         '''
                     }
                 }
