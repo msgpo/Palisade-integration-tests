@@ -131,109 +131,20 @@ spec:
                     container('maven') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                         sh '''
+                        docker images
                         bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh pal-455-ad
                         '''
                     }
                 }
             }
         }
-
-
-        stage('Prerequisites') {
-            dir('Palisade-common') {
-                git url: 'https://github.com/gchq/Palisade-common.git'
-                if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0) {
-                    container('docker-cmds') {
-                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
-                        }
-                    }
-                }
-            }
-            dir('Palisade-clients') {
-                git url: 'https://github.com/gchq/Palisade-clients.git'
-                if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0) {
-                    container('docker-cmds') {
-                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
-                        }
-                    }
-                }
-            }
-            dir('Palisade-readers') {
-                git url: 'https://github.com/gchq/Palisade-readers.git'
-                if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0) {
-                    container('docker-cmds') {
-                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
-                        }
-                    }
-                }
-            }
-            dir('Palisade-services') {
-                git url: 'https://github.com/gchq/Palisade-services.git'
-                // Checkout services if a similarly-named branch exists
-                // If this is a PR, a example smoke-test will be run, so checkout services develop if no similarly-named branch was found
-                // This will be needed to build the jars
-                if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0 || (env.BRANCH_NAME.substring(0, 2) == "PR" && sh(script: "git checkout develop", returnStatus: true) == 0)) {
-                    container('docker-cmds') {
-                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                            sh 'mvn -s $MAVEN_SETTINGS install -P quick -T 1.5C'
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Integration Tests, Checkstyle') {
-            dir('Palisade-integration-tests') {
-                git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-integration-tests.git'
-                container('docker-cmds') {
-                    configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                    }
-                }
-            }
-        }
-
-        stage('Hadolinting') {
-            dir("Palisade-integration-tests") {
-                container('hadolint') {
-                }
-            }
-        }
-
-        stage('Run the JVM Example') {
-            // Always run some sort of smoke test if this is a Pull Request or from develop or main
-            if (env.BRANCH_NAME.substring(0, 2) == "PR" || env.BRANCH_NAME == "develop" || env.BRANCH_NAME == "main") {
-                // If this branch name exists in examples, use that
-                // Otherwise, default to examples/develop
-                dir ('Palisade-examples') {
-                    git branch: 'develop', url: 'https://github.com/gchq/Palisade-examples.git'
-                    git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
-                    container('docker-cmds') {
-                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                            sh 'mvn -s $MAVEN_SETTINGS install -P quick -T 1.5C'
-                            sh '''
-                                bash deployment/local-jvm/bash-scripts/startServices.sh
-                                bash deployment/local-jvm/bash-scripts/runFormattedLocalJVMExample.sh | tee deployment/local-jvm/bash-scripts/exampleOutput.txt
-                                bash deployment/local-jvm/bash-scripts/stopServices.sh
-                            '''
-                            sh 'bash deployment/local-jvm/bash-scripts/verify.sh'
-                        }
-                    }
-                }
-            }
-        }
         stage('Run the K8s Example') {
             dir ('Palisade-examples') {
-                git branch: 'develop', url: 'https://github.com/gchq/Palisade-examples.git'
-                git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
                 container('maven') {
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                         def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(10)
                         if (sh(script: "namespace-create ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
                             sh 'echo namespace create succeeded'
-                            sh 'mvn -s $MAVEN_SETTINGS install -P quick'
                             sh 'helm dep up'
                             if (sh(script: "helm upgrade --install palisade . " +
                                  "--set global.hosting=aws  " +
