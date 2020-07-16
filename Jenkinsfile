@@ -133,7 +133,6 @@ spec:
             kubectl get pv -n pal-455-ad
             kubectl get pvc -n pal-455-ad
             kubectl get jobs -n pal-455-ad
-            helm uninstall palisade -n pal-455-ad
             kubectl delete pods -n pal-455-ad --all
             kubectl delete jobs -n pal-455-ad --all
             kubectl delete namespaces pal-455-ad
