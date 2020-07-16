@@ -196,7 +196,7 @@ spec:
                 // Otherwise, default to examples/develop
                 dir ('Palisade-examples') {
                     git branch: 'develop', url: 'https://github.com/gchq/Palisade-examples.git'
-                    sh(script: "git checkout ${GIT_BRANCH_NAME}")
+                    sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true)
                     container('docker-cmds') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                             sh 'mvn -s $MAVEN_SETTINGS install -P quick'
