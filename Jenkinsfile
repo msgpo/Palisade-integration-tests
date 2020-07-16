@@ -129,13 +129,12 @@ spec:
 
             sh '''
             helm list
-            kubectl get pods -all-namespaces
-            kubectl get pv -all-namespaces
-            kubectl get pvc -all-namespaces
-            kubectl get jobs -all-namespaces
+            kubectl get pods --all-namespaces
+            kubectl get pv --all-namespaces
+            kubectl get pvc --all-namespaces
+            kubectl get jobs --all-namespaces
             kubectl delete pods -n pal-455-ad --all
             kubectl delete jobs -n pal-455-ad --all
-            kubectl delete namespaces pal-455-ad
             '''
 
             }
