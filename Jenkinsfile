@@ -248,6 +248,9 @@ spec:
                                echo("Build failed because of failed helm install")
                             }
                             sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                            sleep(time: 10, unit: 'SECONDS')
+                            sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                            sleep(time: 20, unit: 'SECONDS')
                             sh "bash deployment/local-k8s/k8s-bash-scripts/getLogs.sh ${GIT_BRANCH_NAME_LOWER} palisade-service"
                             sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
                             sh "bash deployment/local-k8s/k8s-bash-scripts/getLogs.sh ${GIT_BRANCH_NAME_LOWER} palisade-service"
