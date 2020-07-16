@@ -134,6 +134,8 @@ spec:
             kubectl get jobs --all-namespaces
             kubectl delete pods -n pal-455-ad --all
             kubectl delete jobs -n pal-455-ad --all
+            kubectl delete pv -n pal-455-ad --all
+            kubectl delete pvc -n pal-455-ad --all
             '''
             }
         }
