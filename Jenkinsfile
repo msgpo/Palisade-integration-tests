@@ -129,10 +129,11 @@ spec:
 
             sh '''
             helm list
-            kubectl get pods -n pal-455-ad
-            kubectl get pv -n pal-455-ad
-            kubectl get pvc -n pal-455-ad
-            kubectl get jobs -n pal-455-ad
+            kubectl delete pv palisade-classpath-jars-example-pal-544-ad
+            kubectl get pods -all-namespaces
+            kubectl get pv -all-namespaces
+            kubectl get pvc -all-namespaces
+            kubectl get jobs -all-namespaces
             kubectl delete pods -n pal-455-ad --all
             kubectl delete jobs -n pal-455-ad --all
             kubectl delete namespaces pal-455-ad
