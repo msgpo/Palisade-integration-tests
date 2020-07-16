@@ -126,16 +126,19 @@ spec:
         }
         stage('Helm') {
             dir ('Palisade-examples') {
-             git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
-                container('maven') {
-                sh '''
-                helm list
-                kubectl get pods --all-namespaces
-                kubectl get pv --all-namespaces
-                kubectl get pvc --all-namespaces
-                kubectl get jobs --all-namespaces
-                bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh pal-455-ad
-                '''
+                git branch: develop, url: 'https://github.com/gchq/Palisade-examples.git'
+                git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
+                    container('maven') {
+                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                        sh '''
+                        helm list
+                        kubectl get pods --all-namespaces
+                        kubectl get pv --all-namespaces
+                        kubectl get pvc --all-namespaces
+                        kubectl get jobs --all-namespaces
+                        bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh pal-455-ad
+                        '''
+                    }
                 }
             }
         }
@@ -228,6 +231,7 @@ spec:
         }
         stage('Run the K8s Example') {
             dir ('Palisade-examples') {
+                git branch: develop, url: 'https://github.com/gchq/Palisade-examples.git'
                 git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
                 container('maven') {
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
@@ -259,8 +263,6 @@ spec:
                             sh 'bash deployment/local-k8s/k8s-bash-scripts/runFormattedK8sExample'
                             sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh ${GIT_BRANCH_NAME_LOWER}"
                         }
-
-
                     }
                 }
             }
