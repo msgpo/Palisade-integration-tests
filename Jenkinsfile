@@ -226,7 +226,7 @@ spec:
         }
         stage('Run the K8s Example') {
             dir ('Palisade-examples') {
-                git branch: develop, url: 'https://github.com/gchq/Palisade-examples.git'
+                git branch: 'develop', url: 'https://github.com/gchq/Palisade-examples.git'
                 git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-examples.git'
                 container('maven') {
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
