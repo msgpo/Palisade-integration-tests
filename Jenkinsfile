@@ -126,21 +126,15 @@ spec:
         }
         stage('Helm') {
             container('maven') {
-
             sh '''
             helm list
             kubectl get pods --all-namespaces
             kubectl get pv --all-namespaces
-            kubectl delete pv kafka-persistence-pal-544-ad-0
-            kubectl delete pv palisade-data-store-pal-544-ad
-            kubectl delete pv redis-persistence-cluster-pal-544-ad-0
-            kubectl delete pv zookeeper-persistence-pal-544-ad-0
             kubectl get pvc --all-namespaces
             kubectl get jobs --all-namespaces
             kubectl delete pods -n pal-455-ad --all
             kubectl delete jobs -n pal-455-ad --all
             '''
-
             }
         }
 
@@ -252,8 +246,9 @@ spec:
                                echo("Build failed because of failed helm install")
                             }
                         }
-                        sleep(time: 30, unit: 'SECONDS')
+                        sleep(time: 60, unit: 'SECONDS')
                         sh 'bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh'
+                        sh 'bash deployment/local-k8s/local-bash-scripts/verify.sh'
                         sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh ${GIT_BRANCH_NAME_LOWER}"
                     }
                 }
