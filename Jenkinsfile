@@ -126,7 +126,7 @@ spec:
         }
         stage('Helm') {
             container('maven') {
-                sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh ${GIT_BRANCH_NAME_LOWER}"
+                sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh pal-455-ad"
             }
         }
 
