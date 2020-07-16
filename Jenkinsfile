@@ -247,8 +247,10 @@ spec:
                             }
                         }
                         sleep(time: 60, unit: 'SECONDS')
-                        sh 'bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh'
-                        sh 'bash deployment/local-k8s/local-bash-scripts/verify.sh'
+                        sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
+                         if (sh(script: "bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh", returnStatus: true) == 0) {
+
+                         }
                         sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh ${GIT_BRANCH_NAME_LOWER}"
                     }
                 }
