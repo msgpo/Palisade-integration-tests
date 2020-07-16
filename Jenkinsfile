@@ -131,6 +131,10 @@ spec:
             helm list
             kubectl get pods --all-namespaces
             kubectl get pv --all-namespaces
+            kubectl delete pv kafka-persistence-pal-544-ad-0
+            kubectl delete pv palisade-data-store-pal-544-ad
+            kubectl delete pv redis-persistence-cluster-pal-544-ad-0
+            kubectl delete pv zookeeper-persistence-pal-544-ad-0
             kubectl get pvc --all-namespaces
             kubectl get jobs --all-namespaces
             kubectl delete pods -n pal-455-ad --all
