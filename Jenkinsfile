@@ -129,7 +129,6 @@ spec:
 
             sh '''
             helm list
-            kubectl delete pv palisade-classpath-jars-example-pal-544-ad
             kubectl get pods -all-namespaces
             kubectl get pv -all-namespaces
             kubectl get pvc -all-namespaces
