@@ -131,9 +131,22 @@ spec:
                     container('maven') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                         sh '''
-                        docker images
                         bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh pal-455-ad
                         '''
+                    }
+                }
+            }
+        }
+        stage('Pre-reqs') {
+            dir('Palisade-services') {
+                git url: 'https://github.com/gchq/Palisade-services.git'
+                // Checkout services if a similarly-named branch exists
+                // If this is a PR, a example smoke-test will be run, so checkout services develop if no similarly-named branch was found
+                // This will be needed to build the jars
+                if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0 || (env.BRANCH_NAME.substring(0, 2) == "PR" && sh(script: "git checkout develop", returnStatus: true) == 0)) {
+                    container('docker-cmds') {
+                        configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                        }
                     }
                 }
             }
