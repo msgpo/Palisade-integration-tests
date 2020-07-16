@@ -237,11 +237,11 @@ spec:
                             sh 'helm dep up'
                             if (sh(script: "helm upgrade --install palisade . " +
                                  "--set global.hosting=aws  " +
+                                 "--set traefik.install=true,dashboard.install=true " +
                                  "--set global.repository=${ECR_REGISTRY} " +
                                  "--set global.hostname=${EGRESS_ELB} " +
                                  "--set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS} " +
                                  "--set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data " +
-                                 "--set traefik.install=true " +
                                  "--namespace ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
                                  echo("successfully deployed")
                             } else {
