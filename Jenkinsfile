@@ -126,7 +126,19 @@ spec:
         }
         stage('Helm') {
             container('maven') {
-                sh "bash deployment/local-k8s/k8s-bash-scripts/checkK8s.sh pal-455-ad"
+
+            sh '''
+            helm list
+            kubectl get pods -n pal-455-ad
+            kubectl get pv -n pal-455-ad
+            kubectl get pvc -n pal-455-ad
+            kubectl get jobs -n pal-455-ad
+            helm uninstall palisade -n pal-455-ad
+            kubectl delete pods -n pal-455-ad --all
+            kubectl delete jobs -n pal-455-ad --all
+            kubectl delete namespaces pal-455-ad
+            '''
+
             }
         }
 
