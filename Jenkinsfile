@@ -134,8 +134,8 @@ spec:
             kubectl get jobs --all-namespaces
             kubectl delete pods -n pal-455-ad --all
             kubectl delete jobs -n pal-455-ad --all
-            kubectl delete pv -n pal-455-ad --all
-            kubectl delete pvc -n pal-455-ad --all
+            kubectl delete pv palisade-classpath-jars-example-pal-544-ad
+            kubectl delete pv palisade-data-store-pal-544-ad
             '''
             }
         }
@@ -248,7 +248,7 @@ spec:
                                echo("Build failed because of failed helm install")
                             }
                         }
-                        sleep(time: 60, unit: 'SECONDS')
+                        sleep(time: 150, unit: 'SECONDS')
                         sh "kubectl get pods -n ${GIT_BRANCH_NAME_LOWER}"
                          if (sh(script: "bash deployment/local-k8s/local-bash-scripts/runFormattedK8sExample.sh", returnStatus: true) == 0) {
 
