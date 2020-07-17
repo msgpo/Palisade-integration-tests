@@ -112,12 +112,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <scm>
-        <!-- <connection>scm:git:ssh://git@github.com:gchq/Palisade-integration-tests.git</connection> -->
-        <developerConnection>scm:git:ssh://git@github.com:gchq/Palisade-integration-tests.git</developerConnection>
-        <url>https://github.com/gchq/</url>
-    </scm>
-
     <distributionManagement>
         <!-- in order to use this, one must have nexus up and running on a given url -->
         <repository>
