@@ -170,7 +170,17 @@ spec:
             }
         }
 
-        stage('Integration Tests, Checkstyle') {
+        stage('Build : Uncached') {
+            dir('Palisade-integration-tests') {
+                git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-integration-tests.git'
+                container('docker-cmds') {
+                    configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
+                        sh 'mvn -s $MAVEN_SETTINGS install'
+                    }
+                }
+            }
+        }
+        stage('Build : Cached') {
             dir('Palisade-integration-tests') {
                 git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-integration-tests.git'
                 container('docker-cmds') {
