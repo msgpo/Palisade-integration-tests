@@ -202,7 +202,7 @@ spec:
                             sh 'mvn -s $MAVEN_SETTINGS install -P quick'
                             sh '''
                                 bash deployment/local-jvm/bash-scripts/example-model/startServices.sh
-                                bash deployment/local-jvm/bash-scripts/example-model/runFormattedLocalJVMExample.sh | tee deployment/local-jvm/bash-scripts/example-model/exampleOutput.txt
+                                bash deployment/local-jvm/bash-scripts/example-model/runFormattedLocalJVMExample.sh | tee deployment/local-jvm/bash-scripts/exampleOutput.txt
                                 bash deployment/local-jvm/bash-scripts/example-model/stopServices.sh
                             '''
                             sh 'bash deployment/local-jvm/bash-scripts/example-model/verify.sh'
