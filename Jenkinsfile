@@ -36,7 +36,7 @@ spec:
   - name: docker-cmds
     image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-did:200608
     imagePullPolicy: IfNotPresent
-    command: [ "/bin/bash", "-c", "--" ]
+    command: [ "cat" ]
     env:
       - name: DOCKER_HOST
         value: tcp://localhost:2375
@@ -49,8 +49,7 @@ spec:
   - name: hadolint
     image: hadolint/hadolint:latest-debian@sha256:15016b18964c5e623bd2677661a0be3c00ffa85ef3129b11acf814000872861e
     imagePullPolicy: IfNotPresent
-    command:
-        - cat
+    command: [ "cat" ]
     tty: true  
     resources:
       requests:
@@ -75,7 +74,7 @@ spec:
   - name: helm
     image: 'alpine/helm:3.2.4'
     ttyEnabled: true
-    command: [ "/bin/bash", "-c", "--" ]
+    command: [ "cat" ]
 
   volumes:
     - name: docker-graph-storage
