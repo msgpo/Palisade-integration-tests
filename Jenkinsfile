@@ -73,7 +73,7 @@ spec:
 
   - name: helm
     image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200608
-    ttyEnabled: true
+    tty: true
     command: [ "cat" ]
 
   volumes:
