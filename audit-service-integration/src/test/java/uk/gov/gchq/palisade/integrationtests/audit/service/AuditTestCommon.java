@@ -28,6 +28,7 @@ import uk.gov.gchq.palisade.resource.impl.FileResource;
 import uk.gov.gchq.palisade.resource.impl.SystemResource;
 import uk.gov.gchq.palisade.rule.Rules;
 import uk.gov.gchq.palisade.service.audit.request.AuditRequest;
+import uk.gov.gchq.palisade.service.audit.service.ServiceName;
 
 import java.util.Collections;
 
@@ -85,7 +86,7 @@ class AuditTestCommon {
                 .withResourceId(mockResource().getId())
                 .withContext(mockContext())
                 .withException(mockException())
-                .withServiceName("SERVICE_NAME");
+                .withServiceName(ServiceName.USER_SERVICE.name());
     }
 
     static AuditRequest.ReadRequestCompleteAuditRequest readRequestCompleteAuditRequest() {
