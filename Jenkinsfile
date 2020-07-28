@@ -17,8 +17,8 @@
 podTemplate(yaml: '''
 apiVersion: v1
 kind: Pod
-metadata: 
-    name: dind 
+metadata:
+    name: dind
 spec:
   affinity:
     nodeAffinity:
@@ -28,89 +28,78 @@ spec:
           matchExpressions:
           - key: palisade-node-name
             operator: In
-            values: 
+            values:
             - node1
             - node2
             - node3
-
   containers:
-    - name: jnlp
-      image: jenkins/jnlp-slave
-      imagePullPolicy: Always
-      args:
-      - $(JENKINS_SECRET)
-      - $(JENKINS_NAME)
-      resources:
-        requests:
-          ephemeral-storage: "4Gi"
-        limits:
-          ephemeral-storage: "8Gi"
-
-    - name: docker-cmds
-      image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-did:200608
-      imagePullPolicy: IfNotPresent
-      command:
-      - sleep
-      args:
-      - 99d
-      env:
-        - name: DOCKER_HOST
-          value: tcp://localhost:2375
-      resources:
-        requests:
-          ephemeral-storage: "4Gi"
-        limits:
-          ephemeral-storage: "8Gi"
-
-    - name: hadolint
-      image: hadolint/hadolint:latest-debian@sha256:15016b18964c5e623bd2677661a0be3c00ffa85ef3129b11acf814000872861e
-      imagePullPolicy: IfNotPresent
-      command:
-          - cat
-      tty: true
-      resources:
-        requests:
-          ephemeral-storage: "1Gi"
-        limits:
-          ephemeral-storage: "2Gi"
-
-    - name: dind-daemon
-      image: docker:1.12.6-dind
-      imagePullPolicy: IfNotPresent
-      resources:
-        requests:
-          cpu: 20m
-          memory: 512Mi
-      securityContext:
-        privileged: true
-      volumeMounts:
-        - name: docker-graph-storage
-          mountPath: /var/lib/docker
-      resources:
-        requests:
-          ephemeral-storage: "1Gi"
-        limits:
-          ephemeral-storage: "2Gi"
-
-    - name: maven
-      image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200608
-      imagePullPolicy: IfNotPresent
-      command: ['docker', 'run', '-p', '80:80', 'httpd:latest']
-      tty: true
-      volumeMounts:
-        - mountPath: /var/run
-          name: docker-sock
-      resources:
-        requests:
-          ephemeral-storage: "4Gi"
-        limits:
-          ephemeral-storage: "8Gi"
-
-    - name: helm
-      image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200608
-      tty: true
-      command: [ "cat" ]
-
+  - name: jnlp
+    image: jenkins/jnlp-slave
+    imagePullPolicy: Always
+    args:
+    - $(JENKINS_SECRET)
+    - $(JENKINS_NAME)
+    resources:
+      requests:
+        ephemeral-storage: "4Gi"
+      limits:
+        ephemeral-storage: "8Gi"
+  - name: docker-cmds
+    image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-did:200608
+    imagePullPolicy: IfNotPresent
+    command:
+    - sleep
+    args:
+    - 99d
+    env:
+      - name: DOCKER_HOST
+        value: tcp://localhost:2375
+    resources:
+      requests:
+        ephemeral-storage: "4Gi"
+      limits:
+        ephemeral-storage: "8Gi"
+  - name: hadolint
+    image: hadolint/hadolint:latest-debian@sha256:15016b18964c5e623bd2677661a0be3c00ffa85ef3129b11acf814000872861e
+    imagePullPolicy: IfNotPresent
+    command:
+        - cat
+    tty: true
+    resources:
+      requests:
+        ephemeral-storage: "1Gi"
+      limits:
+        ephemeral-storage: "2Gi"
+  - name: dind-daemon
+    image: docker:1.12.6-dind
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 20m
+        memory: 512Mi
+    securityContext:
+      privileged: true
+    volumeMounts:
+      - name: docker-graph-storage
+        mountPath: /var/lib/docker
+    resources:
+      requests:
+        ephemeral-storage: "1Gi"
+      limits:
+        ephemeral-storage: "2Gi"
+  - name: maven
+    image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200608
+    imagePullPolicy: IfNotPresent
+    command: ['docker', 'run', '-p', '80:80', 'httpd:latest']
+    tty: true
+    volumeMounts:
+      - mountPath: /var/run
+        name: docker-sock
+    resources:
+      requests:
+        ephemeral-storage: "4Gi"
+      limits:
+        ephemeral-storage: "8Gi"
   volumes:
     - name: docker-graph-storage
       emptyDir: {}
@@ -229,7 +218,7 @@ spec:
 
         stage('Run the K8s Example') {
              dir ('Palisade-examples') {
-                 container('helm') {
+                 container('maven') {
                      configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                          def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(10)
                          if (sh(script: "namespace-create ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
