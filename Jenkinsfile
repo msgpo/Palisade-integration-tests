@@ -72,7 +72,7 @@ spec:
         ephemeral-storage: "8Gi"
 
   - name: helm
-    image: 'alpine/helm:3.2.4'
+    image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200608
     ttyEnabled: true
     command: [ "cat" ]
 
