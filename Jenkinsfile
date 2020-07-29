@@ -247,6 +247,8 @@ spec:
                      sh "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pvc -n ${GIT_BRANCH_NAME_LOWER}"
                      sh "kubectl get pv  -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pv  -n ${GIT_BRANCH_NAME_LOWER}"
                      sh "kubectl get sc  -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pv  -n ${GIT_BRANCH_NAME_LOWER}"
+
+                     sh "helm delete palisade"
                  }
              }
          }
