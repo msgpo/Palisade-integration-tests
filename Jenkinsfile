@@ -99,7 +99,7 @@ spec:
       requests:
         ephemeral-storage: "4Gi"
       limits:
-        ephemeral-storage: "8Gi""
+        ephemeral-storage: "8Gi"
   volumes:
     - name: docker-graph-storage
       emptyDir: {}
@@ -245,16 +245,5 @@ spec:
                  }
              }
          }
-
-        stage('Mount check') {
-            container('helm') {
-                sh "mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${VOLUME_HANDLE_DATA_STORE}.efs.eu-west-1.amazonaws.com:/ ./datastore"
-                dir ('datastore') {
-                    sh "ls -la"
-                    sh "echo 'testdata' > testfile"
-                    sh "cat testfile"
-                }
-            }
-        }
     }
 }
