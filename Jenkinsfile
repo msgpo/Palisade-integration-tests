@@ -221,7 +221,6 @@ spec:
                  container('helm') {
                      def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(24)
                      sh "palisade-login"
-                     sh "extract-addresses"
                      sh "helm dep up"
                      sh(script: "helm install palisade ." +
                               " --set global.hosting=aws" +
