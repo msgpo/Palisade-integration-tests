@@ -132,6 +132,15 @@ spec:
             echo sh(script: 'env | sort', returnStdout: true)
         }
 
+        stage('Mount check') {
+             sh "sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${VOLUME_HANDLE_DATA_STORE}.efs.eu-west-1.amazonaws.com:/ ./datastore"
+             dir ('datastore') {
+                  sh "ls -la"
+                  sh "echo 'testdata' > testfile"
+                  sh "cat testfile"
+             }
+        }
+
         stage('Prerequisites') {
             dir('Palisade-common') {
                 git url: 'https://github.com/gchq/Palisade-common.git'
@@ -243,13 +252,14 @@ spec:
                               " --set global.persistence.storageClassDeploy=true" +
                               " --namespace ${GIT_BRANCH_NAME_LOWER} --create-namespace")
                      sleep(time: 2, unit: 'MINUTES')
-                     sh "kubectl get pod -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pod -n ${GIT_BRANCH_NAME_LOWER}"
-                     sh "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pvc -n ${GIT_BRANCH_NAME_LOWER}"
-                     sh "kubectl get pv  -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pv  -n ${GIT_BRANCH_NAME_LOWER}"
-                     sh "kubectl get sc  -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pv  -n ${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get pod --namespace=${GIT_BRANCH_NAME_LOWER} && kubectl describe pod --namespace=${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get pvc --namespace=${GIT_BRANCH_NAME_LOWER} && kubectl describe pvc --namespace=${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get pv  --namespace=${GIT_BRANCH_NAME_LOWER} && kubectl describe pv  --namespace=${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get sc  --namespace=${GIT_BRANCH_NAME_LOWER} && kubectl describe pv  --namespace=${GIT_BRANCH_NAME_LOWER}"
 
                      sh "helm delete palisade --namespace ${GIT_BRANCH_NAME_LOWER}"
 
+                     sh "kubectl delete pod,pv,pvc,sc --namespace=${GIT_BRANCH_NAME_LOWER} --all"
                      sh "kubectl delete ns ${GIT_BRANCH_NAME_LOWER}"
                  }
              }
