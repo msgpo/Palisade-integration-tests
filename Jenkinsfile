@@ -88,7 +88,7 @@ spec:
       limits:
         ephemeral-storage: "2Gi"
   - name: helm
-    image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200608
+    image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200729
     imagePullPolicy: IfNotPresent
     command: ['docker', 'run', '-p', '80:80', 'httpd:latest']
     tty: true
@@ -244,6 +244,6 @@ spec:
                      sh "kubectl delete pv palisade-data-store-example-${GIT_BRANCH_NAME_LOWER}"
                  }
              }
-         }
+        }
     }
 }
