@@ -101,7 +101,7 @@ spec:
       limits:
         ephemeral-storage: "8Gi"
   - name: helm
-    image: alpine/helm:3.2.4
+    image: dtzar/helm-kubectl:3.2.4
     imagePullPolicy: IfNotPresent
     command: [ "cat" ]
     tty: true
@@ -232,7 +232,7 @@ spec:
         stage('Run the K8s Example') {
              dir ('Palisade-examples') {
                  container('helm') {
-                     def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(10)
+                     def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(24)
                      sh "helm dep up"
                      sh(script: "helm upgrade --install palisade ." +
                               " --set global.hosting=aws" +
