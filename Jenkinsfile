@@ -239,12 +239,14 @@ spec:
                               " --set global.repository=${ECR_REGISTRY}" +
                               " --set global.hostname=${EGRESS_ELB}" +
                               " --set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS}" +
-                              " --set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data" +
+                              " --set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}" +
+                              " --set global.persistence.storageClassDeploy=true" +
                               " --namespace ${GIT_BRANCH_NAME_LOWER} --create-namespace")
                      sleep(time: 2, unit: 'MINUTES')
                      sh "kubectl get pod -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pod -n ${GIT_BRANCH_NAME_LOWER}"
                      sh "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pvc -n ${GIT_BRANCH_NAME_LOWER}"
-                     sh "kubectl get pv -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pv -n ${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get pv  -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pv  -n ${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get sc  -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pv  -n ${GIT_BRANCH_NAME_LOWER}"
                  }
              }
          }
