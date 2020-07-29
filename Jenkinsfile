@@ -132,17 +132,6 @@ spec:
             echo sh(script: 'env | sort', returnStdout: true)
         }
 
-        stage('Mount check') {
-            container('helm') {
-                sh "mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${VOLUME_HANDLE_DATA_STORE}.efs.eu-west-1.amazonaws.com:/ ./datastore"
-                dir ('datastore') {
-                    sh "ls -la"
-                    sh "echo 'testdata' > testfile"
-                    sh "cat testfile"
-                }
-            }
-        }
-
         stage('Prerequisites') {
             dir('Palisade-common') {
                 git url: 'https://github.com/gchq/Palisade-common.git'
@@ -245,7 +234,7 @@ spec:
                  container('helm') {
                      def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(24)
                      sh "helm dep up"
-                     sh(script: "helm upgrade --install palisade ." +
+                     sh(script: "helm install palisade ." +
                               " --set global.hosting=aws" +
                               " --set global.repository=${ECR_REGISTRY}" +
                               " --set global.hostname=${EGRESS_ELB}" +
@@ -261,10 +250,23 @@ spec:
 
                      sh "helm delete palisade --namespace ${GIT_BRANCH_NAME_LOWER}"
 
-                     sh "kubectl delete pod,pv,pvc,sc --namespace=${GIT_BRANCH_NAME_LOWER} --all"
+                     sh "kubectl delete pod,pvc,sc --namespace=${GIT_BRANCH_NAME_LOWER} --all"
                      sh "kubectl delete ns ${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl delete pv palisade-classpath-jars-example-${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl delete pv palisade-data-store-example-${GIT_BRANCH_NAME_LOWER}"
                  }
              }
          }
+
+        stage('Mount check') {
+            container('helm') {
+                sh "mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${VOLUME_HANDLE_DATA_STORE}.efs.eu-west-1.amazonaws.com:/ ./datastore"
+                dir ('datastore') {
+                    sh "ls -la"
+                    sh "echo 'testdata' > testfile"
+                    sh "cat testfile"
+                }
+            }
+        }
     }
 }
