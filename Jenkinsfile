@@ -222,10 +222,10 @@ spec:
                      def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(24)
                      sh "palisade-login"
 
-                     sh(script: "kubectl delete pod,pvc,sc --namespace=${GIT_BRANCH_NAME_LOWER} --all", returnStatus: false)
-                     sh(script: "kubectl delete ns ${GIT_BRANCH_NAME_LOWER}", returnStatus: false)
-                     sh(script: "kubectl delete pv palisade-classpath-jars-example-${GIT_BRANCH_NAME_LOWER}", returnStatus: false)
-                     sh(script: "kubectl delete pv palisade-data-store-${GIT_BRANCH_NAME_LOWER}", returnStatus: false)
+                     sh "kubectl delete pod,pvc,sc --namespace=${GIT_BRANCH_NAME_LOWER} --all || true"
+                     sh "kubectl delete ns ${GIT_BRANCH_NAME_LOWER} || true"
+                     sh "kubectl delete pv palisade-classpath-jars-example-${GIT_BRANCH_NAME_LOWER} || true"
+                     sh "kubectl delete pv palisade-data-store-${GIT_BRANCH_NAME_LOWER} || true"
 
                      sh "helm dep up"
                      sh(script: "helm install palisade ." +
