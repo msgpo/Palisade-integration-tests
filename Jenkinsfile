@@ -242,9 +242,9 @@ spec:
                               " --set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data" +
                               " --namespace ${GIT_BRANCH_NAME_LOWER} --create-namespace")
                      sleep(time: 2, unit: 'MINUTES')
-                     sh "kubectl get pod -n ${GIT_BRANCH_NAME_LOWER}"
-                     sh "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER}"
-                     sh "kubectl get pv -n ${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get pod -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pod -n ${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pvc -n ${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get pv -n ${GIT_BRANCH_NAME_LOWER} && kubectl describe pv -n ${GIT_BRANCH_NAME_LOWER}"
                  }
              }
          }
