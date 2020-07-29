@@ -44,7 +44,7 @@ spec:
         ephemeral-storage: "4Gi"
       limits:
         ephemeral-storage: "8Gi"
-  - name: docker-cmds
+  - name: maven
     image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-did:200608
     imagePullPolicy: IfNotPresent
     command:
@@ -87,7 +87,7 @@ spec:
         ephemeral-storage: "1Gi"
       limits:
         ephemeral-storage: "2Gi"
-  - name: maven
+  - name: helm
     image: 779921734503.dkr.ecr.eu-west-1.amazonaws.com/jnlp-dood-new-infra:200608
     imagePullPolicy: IfNotPresent
     command: ['docker', 'run', '-p', '80:80', 'httpd:latest']
@@ -99,20 +99,7 @@ spec:
       requests:
         ephemeral-storage: "4Gi"
       limits:
-        ephemeral-storage: "8Gi"
-  - name: helm
-    image: dtzar/helm-kubectl:3.2.4
-    imagePullPolicy: IfNotPresent
-    command: [ "cat" ]
-    tty: true
-    volumeMounts:
-      - mountPath: /var/run
-        name: docker-sock
-    resources:
-      requests:
-        ephemeral-storage: "4Gi"
-      limits:
-        ephemeral-storage: "8Gi"
+        ephemeral-storage: "8Gi""
   volumes:
     - name: docker-graph-storage
       emptyDir: {}
@@ -169,7 +156,7 @@ spec:
                 // If this is a PR, a example smoke-test will be run, so checkout services develop if no similarly-named branch was found
                 // This will be needed to build the jars
                 if (sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true) == 0 || (env.BRANCH_NAME.substring(0, 2) == "PR" && sh(script: "git checkout develop", returnStatus: true) == 0)) {
-                    container('docker-cmds') {
+                    container('maven') {
                         configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
         //                    sh 'mvn -s $MAVEN_SETTINGS install -P quick'
                         }
@@ -181,7 +168,7 @@ spec:
         //stage('Integration Tests, Checkstyle') {
         //    dir('Palisade-integration-tests') {
         //        git branch: GIT_BRANCH_NAME, url: 'https://github.com/gchq/Palisade-integration-tests.git'
-        //        container('docker-cmds') {
+        //        container('maven') {
         //            configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
         //                sh 'mvn -s $MAVEN_SETTINGS install'
         //            }
@@ -203,9 +190,9 @@ spec:
             dir ('Palisade-examples') {
                 git branch: 'develop', url: 'https://github.com/gchq/Palisade-examples.git'
                 sh(script: "git checkout ${GIT_BRANCH_NAME}", returnStatus: true)
-                container('maven') {
+                container('helm') {
                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-        //                sh 'mvn -s $MAVEN_SETTINGS install -P quick'
+        //                sh 'mvn -s $MAVEN_SETTINGS install'
                     }
                 }
             }
@@ -230,9 +217,11 @@ spec:
         //}
 
         stage('Run the K8s Example') {
-             dir ('Palisade-examples') {
+             dir('Palisade-examples') {
                  container('helm') {
                      def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(24)
+                     sh "palisade-login"
+                     sh "extract-addresses"
                      sh "helm dep up"
                      sh(script: "helm install palisade ." +
                               " --set global.hosting=aws" +
