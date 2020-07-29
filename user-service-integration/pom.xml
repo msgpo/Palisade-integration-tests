@@ -32,7 +32,7 @@
     <!--  *********** Aritfact ID ***********    -->
 
     <properties>
-        <embedded-redis.version>0.7.2</embedded-redis.version>
+        <embedded-redis.version>0.7.3</embedded-redis.version>
     </properties>
 
     <dependencies>
