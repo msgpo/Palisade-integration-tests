@@ -240,7 +240,7 @@ spec:
                               " --set global.hostname=${EGRESS_ELB}" +
                               " --set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS}" +
                               " --set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data" +
-                              " --namespace ${GIT_BRANCH_NAME_LOWER}")
+                              " --namespace ${GIT_BRANCH_NAME_LOWER} --create-namespace")
                      sleep(time: 2, unit: 'MINUTES')
                      sh "kubectl get pod -n ${GIT_BRANCH_NAME_LOWER}"
                      sh "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER}"
