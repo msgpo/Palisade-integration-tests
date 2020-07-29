@@ -231,29 +231,20 @@ spec:
 
         stage('Run the K8s Example') {
              dir ('Palisade-examples') {
-                 container('maven') {
-                     configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
-                         def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(10)
-                         if (sh(script: "namespace-create ${GIT_BRANCH_NAME_LOWER} || true", returnStatus: true) == 0) {
-                             sh "helm dep up"
-                             if (sh(script: "helm upgrade --install palisade ." +
-                                      " --set global.hosting=aws" +
-                                      " --set global.repository=${ECR_REGISTRY}" +
-                                      " --set global.hostname=${EGRESS_ELB}" +
-                                      " --set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS}" +
-                                      " --set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data" +
-                                      " --namespace ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
-                                 sleep(time: 2, unit: 'MINUTES')
-                                 sh "kubectl get pod -n ${GIT_BRANCH_NAME_LOWER}"
-                                 sh "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER}"
-                                 sh "kubectl get pv -n ${GIT_BRANCH_NAME_LOWER}"
-                             } else {
-                                 echo("Deploy failed because of helm install")
-                             }
-                         } else {
-                             echo("Deploy failed because of namespace-create")
-                         }
-                     }
+                 container('helm') {
+                     def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(10)
+                     sh "helm dep up"
+                     sh(script: "helm upgrade --install palisade ." +
+                              " --set global.hosting=aws" +
+                              " --set global.repository=${ECR_REGISTRY}" +
+                              " --set global.hostname=${EGRESS_ELB}" +
+                              " --set global.persistence.classpathJars.aws.volumeHandle=${VOLUME_HANDLE_CLASSPATH_JARS}" +
+                              " --set global.persistence.dataStores.palisade-data-store.aws.volumeHandle=${VOLUME_HANDLE_DATA_STORE}/resources/data" +
+                              " --namespace ${GIT_BRANCH_NAME_LOWER}")
+                     sleep(time: 2, unit: 'MINUTES')
+                     sh "kubectl get pod -n ${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get pvc -n ${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl get pv -n ${GIT_BRANCH_NAME_LOWER}"
                  }
              }
          }
