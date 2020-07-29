@@ -100,6 +100,19 @@ spec:
         ephemeral-storage: "4Gi"
       limits:
         ephemeral-storage: "8Gi"
+  - name: helm
+    image: alpine/helm:3.2.4
+    imagePullPolicy: IfNotPresent
+    command: [ "cat" ]
+    tty: true
+    volumeMounts:
+      - mountPath: /var/run
+        name: docker-sock
+    resources:
+      requests:
+        ephemeral-storage: "4Gi"
+      limits:
+        ephemeral-storage: "8Gi"
   volumes:
     - name: docker-graph-storage
       emptyDir: {}
