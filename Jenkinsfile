@@ -227,6 +227,8 @@ spec:
                      sh "kubectl delete pv palisade-classpath-jars-example-${GIT_BRANCH_NAME_LOWER} || true"
                      sh "kubectl delete pv palisade-data-store-${GIT_BRANCH_NAME_LOWER} || true"
 
+                     sh "kubectl describe serviceaccount"
+
                      sh "helm dep up"
                      sh(script: "helm install palisade ." +
                               " --set global.hosting=aws" +
