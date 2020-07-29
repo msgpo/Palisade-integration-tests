@@ -88,11 +88,12 @@ public class RedisUserCachingTest {
 
     @Test(expected = NoSuchUserIdException.class)
     public void ttlTest() {
-        // Given - a user was added a long time ago (ttl set to 2s in application.yaml)
+        // Given - a user was added a long time ago (ttl set to 1s in application.yaml)
         User user = new User().userId("ttl-test-user").addAuths(Collections.singleton("authorisation")).addRoles(Collections.singleton("role"));
         userService.addUser(user);
+
         try {
-            Thread.sleep(2500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

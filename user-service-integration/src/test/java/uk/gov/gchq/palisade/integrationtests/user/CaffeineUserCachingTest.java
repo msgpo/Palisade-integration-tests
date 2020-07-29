@@ -15,11 +15,13 @@
  */
 package uk.gov.gchq.palisade.integrationtests.user;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -43,6 +45,13 @@ public class CaffeineUserCachingTest {
 
     @Autowired
     private UserServiceProxy userService;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    private void forceCleanUp() {
+        ((Cache<?, ?>) cacheManager.getCache("users").getNativeCache()).cleanUp();
+    }
 
     @Test
     public void addedUserIsRetrievable() {
@@ -93,13 +102,9 @@ public class CaffeineUserCachingTest {
         for (int count = 0; count <= 150; ++count) {
             userService.addUser(makeUser.apply(count));
         }
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
 
         // When - we try to get the first (now-evicted) user to be added
+        forceCleanUp();
         User notFound = userService.getUser(makeUser.apply(0).getUserId());
 
         // Then - it is no longer found, it has been evicted
@@ -108,17 +113,15 @@ public class CaffeineUserCachingTest {
     }
 
     @Test(expected = NoSuchUserIdException.class)
-    public void ttlTest() {
-        // Given - a user was added a long time ago (ttl set to 2s in application.yaml)
+    public void ttlTest() throws InterruptedException {
+        // Given - a user was added a long time ago (ttl set to 1s in application.yaml)
         User user = new User().userId("ttl-test-user").addAuths(Collections.singleton("authorisation")).addRoles(Collections.singleton("role"));
         userService.addUser(user);
-        try {
-            Thread.sleep(2500);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+
+        Thread.sleep(1000);
 
         // When - we try to access stale cache data
+        forceCleanUp();
         User notFound = userService.getUser(user.getUserId());
 
         // Then - it is no longer found, it has been evicted
