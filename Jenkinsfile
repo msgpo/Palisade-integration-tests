@@ -221,7 +221,7 @@ spec:
                  container('maven') {
                      configFileProvider([configFile(fileId: "${env.CONFIG_FILE}", variable: 'MAVEN_SETTINGS')]) {
                          def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(10)
-                         if (sh(script: "namespace-create ${GIT_BRANCH_NAME_LOWER}", returnStatus: true) == 0) {
+                         if (sh(script: "namespace-create ${GIT_BRANCH_NAME_LOWER} || true", returnStatus: true) == 0) {
                              sh "helm dep up"
                              if (sh(script: "helm upgrade --install palisade ." +
                                       " --set global.hosting=aws" +
