@@ -221,6 +221,12 @@ spec:
                  container('helm') {
                      def GIT_BRANCH_NAME_LOWER = GIT_BRANCH_NAME.toLowerCase().take(24)
                      sh "palisade-login"
+
+                     sh "kubectl delete pod,pvc,sc --namespace=${GIT_BRANCH_NAME_LOWER} --all"
+                     sh "kubectl delete ns ${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl delete pv palisade-classpath-jars-example-${GIT_BRANCH_NAME_LOWER}"
+                     sh "kubectl delete pv palisade-data-store-${GIT_BRANCH_NAME_LOWER}"
+
                      sh "helm dep up"
                      sh(script: "helm install palisade ." +
                               " --set global.hosting=aws" +
@@ -237,11 +243,6 @@ spec:
                      sh "kubectl get sc  --namespace=${GIT_BRANCH_NAME_LOWER} && kubectl describe pv  --namespace=${GIT_BRANCH_NAME_LOWER}"
 
                      sh "helm delete palisade --namespace ${GIT_BRANCH_NAME_LOWER}"
-
-                     sh "kubectl delete pod,pvc,sc --namespace=${GIT_BRANCH_NAME_LOWER} --all"
-                     sh "kubectl delete ns ${GIT_BRANCH_NAME_LOWER}"
-                     sh "kubectl delete pv palisade-classpath-jars-example-${GIT_BRANCH_NAME_LOWER}"
-                     sh "kubectl delete pv palisade-data-store-${GIT_BRANCH_NAME_LOWER}"
                  }
              }
         }
